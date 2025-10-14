@@ -112,7 +112,31 @@ To [set up your github pages site](https://docs.github.com/en/pages/getting-star
 
 <img src='assets/pages.png'>
 
-The workflow code is already included in the main class repository. When you push your changes up to github, then your site will automatically be redeployed and be avallable at `https://[YOUR_USERNAME].github.io/[YOUR_REPOSITORY_NAME]/`.
+The workflow code is already included in the main class repository, but disabled by default. The workflow file is something called a `.yml` file, located in the `.github` file at `.github/workflows/deploy.yml`. This workflow includes instructions telling github to build and deploy your app whenever you push to main. You shouldn't have to change this file at all, but here's the key commands of the file for your understanding:
+
+```yml
+on:
+  # Run this workflow whenever a new commit is pushed to main.
+  push: {branches: [main]}
+
+jobs:
+  # define the job
+  deploy:
+    ...
+    steps:
+      - run: npm run build # builds the app
+      ...
+      - name: Deploy # run the github deploy pages action
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+```
+
+To deploy your app on push, you need to enable these workflows. Navigate to the "actions" tab, and click "I understand my workflows, go ahead and enable them". The app will now deploy on push.
+
+<img src='assets/enable_workflow.png'>
+
+When you push your changes up to github, then your site will automatically be redeployed and be avallable at `https://[YOUR_USERNAME].github.io/[YOUR_REPOSITORY_NAME]/`.
 
 Once you have pushed a change, you can see all the deployments triggered from pushed in the deployments section of your repository page. These will not be triggered until you make a change to your repo and push it back up to github.
 
