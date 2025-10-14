@@ -3,6 +3,7 @@ title: "Lab 0: Getting Started"
 toc: true
 ---
 
+<!-- Markdown Heading Samples -->
 
 # Lab 0 Work
 
@@ -11,6 +12,8 @@ Beginning of Interactive Data Visualization Labs
 
 ### Learning Goals
 <br>
+
+<!-- HTML table sample -->
 
 #### Tracking Progress
 <table>
@@ -37,6 +40,8 @@ Beginning of Interactive Data Visualization Labs
 </table>
 <br>
 
+<!-- HTML List sample-->
+
 #### Challenges
   <ul>
     <li>Understanding the tools</li>
@@ -56,10 +61,14 @@ Beginning of Interactive Data Visualization Labs
 #### Sample Interactive Data Visualization
 <br>
 
+<!-- HTML insert image -->
+
 <img src="IDVsample.jpg">
 
 <br>
 <br>
+
+<!--  JS input sample-->
 
 ```js
 const name = view(
