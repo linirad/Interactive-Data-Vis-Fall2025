@@ -3,21 +3,16 @@ title: "Lab 0: Getting Started"
 toc: true
 ---
 
-This page is where you can iterate. Follow the lab instructions in the [readme.md](./README.md).
-
 
 # Lab 0 Work
 
-## Markdown Work
-Beginning with Markdown text
+## by Lini
+Beginning of Interactive Data Visualization Labs
 
-### Markdown Heading 3 sample
+### Learning Goals
 <br>
 
-### HTML Work
-<br>
-
-#### HTML Table
+#### Tracking Progress
 <table>
       <thead>
         <tr>
@@ -27,39 +22,45 @@ Beginning with Markdown text
       </thead>
       <tbody>
         <tr>
-          <td>Goal 1</td>
-          <td>Progress Report 1</td>
+          <td>Working with Git, GitHub, Observable framework</td>
+          <td>Initiated work in Class 3</td>
         </tr>
         <tr>
-          <td>Goal 2</td>
-          <td>Progress Report 2</td>
+          <td>Learning HTML, CSS, JS</td>
+          <td>Initiated work in Class 4</td>
+        </tr>
+        <tr>
+          <td>Complete Lab 0</td>
+          <td>Deadline set for Class 5</td>
         </tr>
       </tbody>
 </table>
+<br>
 
-#### HTML unordered list.
+#### Challenges
   <ul>
-    <li>Item 1</li>
-    <li>Item 2</li>
-    <li>Item 3</li>
-    <li>Item 4</li>
+    <li>Understanding the tools</li>
+    <li>Grasping the concepts behind the visualizations</li>
+    <li>Deciphering the code</li>
+    <li>Not getting lost in the details</li>
   </ul>
 
-#### HTML ordered list
+#### Learning Plan
 <ol>
-    <li>Step 1</li>
-    <li>Step 2</li>
-    <li>Step 3</li>
-    <li>Step 4</li>
+    <li>One step at a time</li>
+    <li>Utilize available documentation</li>
+    <li>Code, test, fix, retest</li>
+    <li>Research, research, research</li>
   </ol>
 
-#### HTML Image: Sample Interactive Data Visualization
+#### Sample Interactive Data Visualization
+<br>
+
 <img src="IDVsample.jpg">
 
 <br>
 <br>
 
-#### JS Input
 ```js
 const name = view(
   Inputs.text({
@@ -68,4 +69,4 @@ const name = view(
   })
 );
 ```
-Hello ${name}
+Welcome to Interactive Data Visualization ${name}
