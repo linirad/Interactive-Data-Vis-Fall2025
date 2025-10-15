@@ -79,3 +79,14 @@ const name = view(
 );
 ```
 Welcome to Interactive Data Visualization ${name}
+
+<br>
+
+```js
+const som = view(Inputs.select(
+  ["Angry Birds", "Dazed and Confused", "Forest Gump", "Happy Days", "Panic", "Terminator", "The Pursuit of Happyness" ],
+  {label: "Movie Title", value: "The Pursuit of Happyness"}
+));
+```
+
+Movie Title that best reflects your state of mind: ${som}!
