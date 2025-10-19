@@ -114,9 +114,9 @@ Plot.plot({
 Based on the plots 2.1 to 2.4, the ideal weather conditions for pollination are listed below:
 <ul>
   <li> the most visits happen on cloudy or partly cloudy days </li>
-  <li> relatively more visit when the temperature over 21 degree celcius </li>
+  <li> relatively more visit when the temperature is over 21 degree celcius </li>
   <li> more visits when the wind speed is less than 5 km/h </li>
-  <li> humidity does not appear to be a factor as the visits are evenly distributed across the range</li>
+  <li> humidity does not appear to be a factor and the visits are evenly distributed across the range</li>
 </ul>
 
 <br>
@@ -139,4 +139,3 @@ Plot.plot({
 ```
 
 Based on the plot, the flower with the most nectar production is the sunflower followed by the coneflower and Lavender.
-
