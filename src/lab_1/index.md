@@ -87,6 +87,7 @@ const xvariable = view(Inputs.select(
   {label: "x-axis", value: "temperature"}
 ));
 ```
+<br>
 
 ```js
 //1. Bar chart: Visit Count by Weather Condition
@@ -96,6 +97,7 @@ Plot.plot({
     grid: true
   },
   marks: [
+    Plot.frame(),
     Plot.barY(pollinators, {x: "weather_condition", y: "visit_count", aggregate: "mean", fill: "#69b3a2"})
   ],
   width: 600, // Set the width of the chart
