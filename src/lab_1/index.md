@@ -164,8 +164,9 @@ The ideal weather conditions for pollination are listed below and the plots show
 <ul>
   <li> cloudy or partly cloudy days, </li>
   <li> temperature in the range of 16-29 degree celcius, </li>
-  <li> lower wind speed, less than 5 km/h and</li>
-  <li> humidity in the range of 60 to 90%</li>
+  <li> humidity in the range of 60 to 90%,</li>
+  <li> lower wind speeds, less than 5 km/h and</li>
+  <li> appear to work night and day although they are generally more active during the day </li>
 </ul>
 
 <br>
