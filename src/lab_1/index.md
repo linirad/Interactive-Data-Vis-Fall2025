@@ -1,5 +1,5 @@
 ---
-title: "Lab 1: Passing Pollinators"
+title: "U+1F41D Lab 1: Passing Pollinators U+1F41D"
 toc: true
 ---
 
@@ -166,7 +166,7 @@ The ideal weather conditions for pollination are listed below and the plots show
   <li> temperature in the range of 16-29 degree celcius, </li>
   <li> humidity in the range of 60 to 90%,</li>
   <li> lower wind speeds, less than 5 km/h and</li>
-  <li> appear to work night and day although they are generally more active during the day </li>
+  <li> working night and day although they generally appear to be more active in the day </li>
 </ul>
 
 <br>
