@@ -55,7 +55,7 @@ Based on the plot, the highest variation in the average body mass and wing span 
 Plot.plot({
   grid: true,
   marginRight: 60,
-  facet: {label: null},
+  facet: {label: null}, 
       y: {ticks: d3.range(0, 30, 2),
           domain: [0, 30],
           label: "Number of Visits"
@@ -89,21 +89,21 @@ const xvariable = view(Inputs.select(
 ```
 
 ```js
-// 1. Bar chart: Visit Count by Weather Condition
-// Plot.plot({
-//   height: 200,
-//   y: {
-//     grid: true
-//   },
-//   marks: [
-//     Plot.barY(pollinators, {x: "weather_condition", y: "visit_count", aggregate: "mean", fill: "#69b3a2"})
-//   ],
-//   width: 600, // Set the width of the chart
-//   height: 400, // Set the height of the chart
-//   y: { label: "Average Visit Count" },
-//   x: { label: "Weather Condition" },
-//   title: "2.1 Pollinator Visits by Weather Condition"
-// })
+//1. Bar chart: Visit Count by Weather Condition
+Plot.plot({
+  height: 200,
+  y: {
+    grid: true
+  },
+  marks: [
+    Plot.barY(pollinators, {x: "weather_condition", y: "visit_count", aggregate: "mean", fill: "#69b3a2"})
+  ],
+  width: 600, // Set the width of the chart
+  height: 400, // Set the height of the chart
+  y: { label: "Average Visit Count" },
+  x: { label: "Weather Condition" },
+  title: "2.1 Pollinator Visits by Weather Condition"
+})
 ```
 
 ```js
@@ -173,9 +173,11 @@ The ideal weather conditions for pollination are listed below and the plots show
 Plot.plot({
   height: 200,
   y: {
+    domain: [0, 100],
     grid: true
   },
   marks: [
+    Plot.frame(),
     Plot.barY(pollinators, {x: "flower_species", y: "nectar_production", aggregate: "mean", fill: "#69b3a2"})
   ],
   width: 600, // Set the width of the chart
