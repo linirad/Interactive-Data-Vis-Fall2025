@@ -64,7 +64,7 @@ Plot.plot({
           domain: [0, 100],
          },  
     color: {legend: true}, 
-    title: "Pollinator Visits vs. Weather Conditions per Plot Location",
+    title: "2.1 Plot-wise Pollinator Visits by Weather Conditions",
   marks: [
     Plot.frame(),
     Plot.ruleX([0]),
@@ -102,9 +102,10 @@ Plot.plot({
   height: 400, // Set the height of the chart
   y: { label: "Average Visit Count" },
   x: { label: "Weather Condition" },
-  title: "2.1 Pollinator Visits by Weather Condition"
+  title: "2.2 Pollinator Visits by Weather Condition"
 })
 ```
+<br>
 
 ```js
 
