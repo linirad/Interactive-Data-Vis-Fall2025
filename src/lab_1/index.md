@@ -48,7 +48,8 @@ Based on the plot, the highest variation in the average body mass and wing span 
 
 ## Section 2: Ideal Weather for Pollinating
 
-#### Credit: Thanks to Joseph Borri. Studied and Adapted from Joseph's lab.
+#### Credit: Thanks to Joseph Borri. Drop down plot feature adapted from Joseph's lab.
+
 <br>
 
 ```js
@@ -166,7 +167,8 @@ The ideal weather conditions for pollination are listed below and the plots show
   <li> temperature in the range of 16-29 degree celcius, </li>
   <li> humidity in the range of 60 to 90%,</li>
   <li> lower wind speeds, less than 5 km/h and</li>
-  <li> working night and day although they appear to be more active in the day </li>
+  <li> working night and day although they\
+   appear to be more active in the day </li>
 </ul>
 
 <br>
@@ -182,7 +184,7 @@ Plot.plot({
   },
   marks: [
     Plot.frame(),
-    Plot.barY(pollinators, {x: "flower_species", y: "nectar_production", aggregate: "mean", fill: "#69b3a2"})
+    Plot.barY(pollinators, {x: "flower_species", y: "nectar_production", aggregate: "mean", fill: "#69b3a2", sort: { x: "-y"}}) 
   ],
   width: 600, // Set the width of the chart
   height: 400, // Set the height of the chart
