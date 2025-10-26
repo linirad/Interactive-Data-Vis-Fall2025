@@ -49,7 +49,6 @@ Plot.plot({
 
 ## Section 2: Ideal Weather for Pollinating
 
-
 ```js
 // Plot.plot({
 //   grid: true,
@@ -113,6 +112,7 @@ Plot.plot({
 // Temperature plot
 Plot.plot({
   marks: [
+    Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
       {y: "count"}, 
@@ -130,6 +130,7 @@ Plot.plot({
 // Humidity plot
 Plot.plot({
   marks: [
+    Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
       {y: "count"}, 
@@ -147,6 +148,7 @@ Plot.plot({
 // Wind speed plot
 Plot.plot({
   marks: [
+    Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
       {y: "count"}, 
@@ -164,6 +166,7 @@ Plot.plot({
 // Observation hour plot
 Plot.plot({
   marks: [
+    Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
       {y: "count"}, 
@@ -171,7 +174,7 @@ Plot.plot({
   ],
   color: { legend: true },
   height: 300,
-  y: {domain: [0, 50], grid: true},
+  y: {domain: [0, 70], grid: true},
   x: {domain: [0, 50], label: "Observation hour"},
   title: "2.5 Observation Hour"
 })
