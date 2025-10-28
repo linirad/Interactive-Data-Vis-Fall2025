@@ -71,7 +71,7 @@ Plot.plot({
 ```
 
 <br>
-<!-- Question - Is there a way to plot temperature/ wind_speed/ humidity against visit_count? I could not figure out a plot based on what was discussed in class-->
+<!-- Question - Is there a way to plot temperature/ wind_speed/ humidity against visit_count? I could not figure out a plot based on our class discussions-->
 
 ```js
 // Temperature plot
@@ -187,16 +187,16 @@ Based on the dashboard, listed below are the section wise results:
 
 
 ```js
-// Alternate Section 2 plot with dropdown for weather conditions plots
+// Alternate Section 2 plot with dropdown for weather conditions plots. Could not create the distinct plot especially of wind speed that is achieved here in my attempts with binX
 // Plot.plot({
 //   grid: true,
 //   marginRight: 60,
 //   facet: {label: null}, 
-//       y: {ticks: d3.range(0, 30, 2),
+//       y: {
 //           domain: [0, 30],
 //           label: "Number of Visits"
 //          },
-//       x: {ticks: d3.range(0, 100, 10),
+//       x: {
 //           domain: [0, 100],
 //          },  
 //     color: {legend: true}, 
