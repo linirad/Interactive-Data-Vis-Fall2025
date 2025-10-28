@@ -49,42 +49,6 @@ Plot.plot({
 
 ## Section 2: Ideal Weather for Pollinating
 
-```js
-// Plot.plot({
-//   grid: true,
-//   marginRight: 60,
-//   facet: {label: null}, 
-//       y: {ticks: d3.range(0, 30, 2),
-//           domain: [0, 30],
-//           label: "Number of Visits"
-//          },
-//       x: {ticks: d3.range(0, 100, 10),
-//           domain: [0, 100],
-//          },  
-//     color: {legend: true}, 
-//     title: "2.1 Plot-wise Pollinator Visits by Weather Conditions",
-//   marks: [
-//     Plot.frame(),
-//     Plot.ruleX([0]),
-//     Plot.dot(pollinators, {
-//       x: xvariable,
-//       y: "visit_count",
-//       fy: "location",
-//       stroke: "weather_condition",
-//       sort: { x: "x", reverse: false, reduce: "median", order: "descending" },
-//       sort: { y: "y", reverse: true, order: "ascending" },
-//       tip: true,
-//     })
-//   ]
-// })
-```
-
-```js
-// const xvariable = view(Inputs.select(
-//   ["temperature", "humidity", "wind_speed", "observation_hour"],
-//   {label: "x-axis", value: "temperature"}
-// ));
-```
 <br>
 
 ```js
@@ -107,6 +71,7 @@ Plot.plot({
 ```
 
 <br>
+<!-- Question - Is there a way to plot temperature/ wind_speed/ humidity against visit_count? I could not figure out a plot based on what was discussed in class-->
 
 ```js
 // Temperature plot
@@ -180,7 +145,88 @@ Plot.plot({
 })
 ```
 
+<br>
+
+## Section 3: Flower with Most Nectar Production
+
 ```js
+// Flower species vs nectar production plot
+Plot.plot({
+  marks: [
+    Plot.frame(),
+    Plot.barY(pollinators, {
+      x: "flower_species", 
+      y: "nectar_production", 
+      aggregate: "mean", 
+      fill: "#69b3a2", 
+      sort: { x: "-y"}, 
+      tip: true}) 
+  ],
+  height: 300, // Set the height of the chart
+  x: { label: "Flower Species" },
+  y: { label: "Nectar Production (μL)", domain: [0, 100],
+    grid: true},
+  title: "Flower with Most Nectar Production"
+})
+```
+
+Based on the dashboard, listed below are the section wise results: 
+<ul>
+<li> <b>Section 1:</b> The highest variation in the average body mass and wing span distribution is found in the carpenter bee followed by the bumblebee and the honeybee.</li>
+<li><b>Section 2:</b> The ideal weather conditions for pollination are listed below and the plots show that bees prefer:</li>
+<ul>
+  <li> cloudy or partly cloudy days, </li>
+  <li> warmer temperatures in the range of 16-29 degree celcius, </li>
+  <li> humidity in the range of 60 to 90%,</li>
+  <li> lower wind speeds and</li>
+  <li> working during the day (8 am to 8 pm) </li>
+</ul>
+<li><b>Section 3:</b> The flower with the most nectar production is the sunflower followed by the coneflower and Lavender.
+</li>
+</ul>
+
+
+```js
+// Alternate Section 2 plot with dropdown for weather conditions plots
+// Plot.plot({
+//   grid: true,
+//   marginRight: 60,
+//   facet: {label: null}, 
+//       y: {ticks: d3.range(0, 30, 2),
+//           domain: [0, 30],
+//           label: "Number of Visits"
+//          },
+//       x: {ticks: d3.range(0, 100, 10),
+//           domain: [0, 100],
+//          },  
+//     color: {legend: true}, 
+//     title: "2.1 Plot-wise Pollinator Visits by Weather Conditions",
+//   marks: [
+//     Plot.frame(),
+//     Plot.ruleX([0]),
+//     Plot.dot(pollinators, {
+//       x: xvariable,
+//       y: "visit_count",
+//       fy: "location",
+//       stroke: "weather_condition",
+//       sort: { x: "x", reverse: false, reduce: "median", order: "descending" },
+//       sort: { y: "y", reverse: true, order: "ascending" },
+//       tip: true,
+//     })
+//   ]
+// })
+```
+
+```js
+// const xvariable = view(Inputs.select(
+//   ["temperature", "humidity", "wind_speed", "observation_hour"],
+//   {label: "x-axis", value: "temperature"}
+// ));
+```
+
+
+```js
+// Initial experiments with scatter plots. Difficult to read and reach findings
 // 2. Scatter plot: Temperature vs Visit Count
 // Plot.plot({
 //   marks: [
@@ -230,46 +276,20 @@ Plot.plot({
 // })
 ```
 
-
-
-<br>
-
-## Section 3: Flower with Most Nectar Production
-
 ```js
-// Flower species vs nectar production plot
-Plot.plot({
-  marks: [
-    Plot.frame(),
-    Plot.barY(pollinators, {
-      x: "flower_species", 
-      y: "nectar_production", 
-      aggregate: "mean", 
-      fill: "#69b3a2", 
-      sort: { x: "-y"}, 
-      tip: true}) 
-  ],
-  height: 300, // Set the height of the chart
-  x: { label: "Flower Species" },
-  y: { label: "Nectar Production (μL)", domain: [0, 100],
-    grid: true},
-  title: "Flower with Most Nectar Production"
-})
+// Attempt with groupX - not readable to reach a conclusion
+// Plot.plot({
+//   marks: [
+//     Plot.barY(pollinators, 
+//       Plot.groupX(
+//         { y: "count" },
+//         { 
+//           x: "temperature", 
+//           fill: "weather_condition", 
+//         }
+//       )
+//     )
+//   ],
+//   color: { legend: true }
+// })
 ```
-
-Based on the dashboard, listed below are the section wise results: 
-<ul>
-<li> <b>Section 1:</b> The highest variation in the average body mass and wing span distribution is found in the carpenter bee followed by the bumblebee and the honeybee.</li>
-<li><b>Section 2:</b> The ideal weather conditions for pollination are listed below and the plots show that bees prefer:</li>
-<ul>
-  <li> cloudy or partly cloudy days, </li>
-  <li> warmer temperatures in the range of 16-29 degree celcius, </li>
-  <li> humidity in the range of 60 to 90%,</li>
-  <li> lower wind speeds and</li>
-  <li> working during the day (8 am to 8 pm) </li>
-</ul>
-<li><b>Section 3:</b> The flower with the most nectar production is the sunflower followed by the coneflower and Lavender.
-</li>
-</ul>
-
-
