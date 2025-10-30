@@ -1,5 +1,5 @@
 ---
-# title: "Lab 1: Passing Pollinators "
+title: "Lab 1: Passing Pollinators "
 toc: true
 ---
 
