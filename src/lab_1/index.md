@@ -1,9 +1,10 @@
 ---
-title: "U+1F41D Lab 1: Passing Pollinators U+1F41D"
+# title: "Lab 1: Passing Pollinators "
 toc: true
 ---
 
-# Lab 1: Report on Pollinator Trends
+# Lab 1: Report on Pollinator Trends &#x1F41D; 
+
 <!--  Fetch pollinator data -->
 
 ```js
@@ -51,7 +52,7 @@ Plot.plot({
 
 <br>
 
-```js
+<!-- ```js
 //Bar chart: Visit Count by Weather Condition
 Plot.plot({
   marks: [
@@ -68,10 +69,30 @@ Plot.plot({
   x: { label: "Weather Condition" },
   title: "2.1 Pollinator Visits by Weather Condition"
 })
-```
+``` -->
 
-<br>
-<!-- Question - Is there a way to plot temperature/ wind_speed/ humidity against visit_count? I could not figure out a plot based on our class discussions-->
+```js
+Plot.plot({
+  marks: [
+    Plot.frame(),
+    Plot.barY(pollinators, 
+     Plot.groupX(
+      { y: "mean" },
+      {
+        x: "weather_condition", 
+        y: "visit_count", 
+        fill: "weather_condition",
+        tip: true
+      }
+      ))
+  ],
+  color: { legend: true },
+  height: 300, // Set the height of the chart
+  y: { label: "Average Visit Count", grid: true},
+  x: { label: "Weather Condition" },
+  title: "2.1 Pollinator Visits by Weather Condition"
+})
+```
 
 ```js
 // Temperature plot
@@ -80,12 +101,14 @@ Plot.plot({
     Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
-      {y: "count"}, 
-      {x: "temperature", fill: "weather_condition", tip: true})),
+      {y: "sum"}, 
+      {x: "temperature", y: "visit_count", 
+       fill: "weather_condition", 
+       tip: true})),
   ],
   color: { legend: true },
   height: 300,
-  y: {domain: [0, 70], grid: true},
+  y: {domain: [0, 400], label: "Visit Count (sum)", grid: true},
   x: {domain: [0, 50], label: "Temperature (°C)"},
   title: "2.2 Temperature"
 })
@@ -98,12 +121,12 @@ Plot.plot({
     Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
-      {y: "count"}, 
-      {x: "humidity", fill: "weather_condition", tip: true})),
+      {y: "sum"}, 
+      {x: "humidity", y: "visit_count", fill: "weather_condition", tip: true})),
   ],
   color: { legend: true },
   height: 300,
-  y: {domain: [0, 70], grid: true},
+  y: {domain: [0, 400], label: "Visit Count (sum)", grid: true},
   x: {domain: [0, 100], label: "Humidity (%)"},
   title: "2.3 Humidity"
 })
@@ -116,14 +139,14 @@ Plot.plot({
     Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
-      {y: "count"}, 
-      {x: "wind_speed", fill: "weather_condition", tip: true})),
+      {y: "sum"}, 
+      {x: "wind_speed", y: "visit_count", fill: "weather_condition", tip: true})),
   ],
   color: { legend: true },
   height: 300,
-  y: {domain: [0, 50], grid: true},
+  y: {domain: [0, 500], label: "Visit Count (sum)", grid: true},
   x: {domain: [0, 50], label: "Wind Speed (km/h)"},
-  title: "2.4 Wind Spped"
+  title: "2.4 Wind Speed"
 })
 ```
 
@@ -135,11 +158,11 @@ Plot.plot({
     Plot.rectY(pollinators, 
     Plot.binX(
       {y: "count"}, 
-      {x: "observation_hour", fill: "weather_condition", tip: true})),
+      {x: "observation_hour", y: "visit_count", fill: "weather_condition", tip: true})),
   ],
   color: { legend: true },
   height: 300,
-  y: {domain: [0, 70], grid: true},
+  y: {domain: [0, 70], label: "Visit Count (sum)", grid: true},
   x: {domain: [0, 50], label: "Observation hour"},
   title: "2.5 Observation Hour"
 })
@@ -149,7 +172,33 @@ Plot.plot({
 
 ## Section 3: Flower with Most Nectar Production
 
+
 ```js
+// Flower species vs nectar production plot
+Plot.plot({
+  marks: [
+    Plot.frame(),
+    Plot.barY(pollinators, 
+     Plot.groupX(
+      { y: "mean" },
+      {
+        x: "flower_species", 
+        y: "nectar_production", 
+        fill: "flower_species",
+        sort: { x: "-y"},
+        tip: true
+      }
+      ))
+  ],
+  color: { legend: true },
+  height: 300, // Set the height of the chart
+  y: { label: "Nectar Production (μL)", grid: true},
+  x: { label: "Flower Species" },
+  title: "Flower with Most Nectar Production"
+})
+```
+
+<!-- ```js
 // Flower species vs nectar production plot
 Plot.plot({
   marks: [
@@ -168,7 +217,7 @@ Plot.plot({
     grid: true},
   title: "Flower with Most Nectar Production"
 })
-```
+``` -->
 
 Based on the dashboard, listed below are the section wise results: 
 <ul>
