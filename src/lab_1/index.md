@@ -77,7 +77,7 @@ Plot.plot({
     Plot.frame(),
     Plot.barY(pollinators, 
      Plot.groupX(
-      { y: "mean" },
+      { y: "count" },
       {
         x: "weather_condition", 
         y: "visit_count", 
@@ -88,7 +88,7 @@ Plot.plot({
   ],
   color: { legend: true },
   height: 300, // Set the height of the chart
-  y: { label: "Average Visit Count", grid: true},
+  y: { label: "Visit Count", grid: true},
   x: { label: "Weather Condition" },
   title: "2.1 Pollinator Visits by Weather Condition"
 })
@@ -157,12 +157,12 @@ Plot.plot({
     Plot.frame(),
     Plot.rectY(pollinators, 
     Plot.binX(
-      {y: "count"}, 
+      {y: "sum"}, 
       {x: "observation_hour", y: "visit_count", fill: "weather_condition", tip: true})),
   ],
   color: { legend: true },
   height: 300,
-  y: {domain: [0, 70], label: "Visit Count (sum)", grid: true},
+  y: {domain: [0, 400], label: "Visit Count (sum)", grid: true},
   x: {domain: [0, 50], label: "Observation hour"},
   title: "2.5 Observation Hour"
 })
@@ -180,7 +180,7 @@ Plot.plot({
     Plot.frame(),
     Plot.barY(pollinators, 
      Plot.groupX(
-      { y: "mean" },
+      { y: "sum" },
       {
         x: "flower_species", 
         y: "nectar_production", 
