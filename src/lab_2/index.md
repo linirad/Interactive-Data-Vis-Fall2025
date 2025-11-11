@@ -205,7 +205,6 @@ Plot.plot({
         }
       })
     ] : []),
-    // Plot.ruleY([0]),
      Plot.ruleX([fareChange], { stroke: "red"}),
      Plot.text([fareChange], {
       x: d => d,
@@ -373,8 +372,9 @@ const stationValues = Object.entries(
   }, {})
 ).map(([station, {totalAttendance, staffCount}]) => ({
   station,
-  y: staffCount > 0 ? totalAttendance / staffCount : 0
+  y: staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0
 }));
+// display(stationValues)
 ```
 
 ```js
@@ -403,9 +403,13 @@ Plot.plot({
         y: values => {
           const totalAttendance = values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0);
           const staffCount = values[0].staff_count;
-          return staffCount > 0 ? totalAttendance / staffCount : 0;
-        }
-      },
+          // const exp_attendance = d.expected_attendance;
+          return staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0;
+        },
+        //       // Add extra channels for tooltip
+        // totalAttendance: values => values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0),
+        // totalStaff: values => values.reduce((sum, d) => sum + (d.staff_count || 0), 0)
+    },
       {
         x: "nearby_station",
         fill: "#4f46e5",
