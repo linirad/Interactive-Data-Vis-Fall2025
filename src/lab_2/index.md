@@ -114,6 +114,25 @@ const popularEventWithTraffic = popularEvent ? {
 // display(popularEventWithTraffic)
 ```
 
+```js
+// Split data into before/after fare change
+const beforeData = selectedStationData.filter(d => d.date < fareChange);
+const afterData = selectedStationData.filter(d => d.date >= fareChange);
+
+// Compute averages
+const avgBefore = beforeData.reduce((sum, d) => sum + d.total_traffic, 0) / beforeData.length;
+const avgAfter = afterData.reduce((sum, d) => sum + d.total_traffic, 0) / afterData.length;
+
+// Find representative x positions (midpoints)
+const xBefore = new Date((beforeData[0].date.getTime() + beforeData.at(-1).date.getTime()) / 2);
+const xAfter = new Date((afterData[0].date.getTime() + afterData.at(-1).date.getTime()) / 2);
+
+// Prepare objects for plotting
+const avgPoints = [
+  { x: xBefore, y: avgBefore, label: `Avg ridership before fare rise: ${avgBefore.toFixed(0)}` },
+  { x: xAfter,  y: avgAfter,  label: `Avg ridership after fare rise: ${avgAfter.toFixed(0)}` }
+];
+```
 
 ```js
 Plot.plot({
@@ -186,7 +205,7 @@ Plot.plot({
         }
       })
     ] : []),
-    Plot.ruleY([0]),
+    // Plot.ruleY([0]),
      Plot.ruleX([fareChange], { stroke: "red"}),
      Plot.text([fareChange], {
       x: d => d,
@@ -197,7 +216,31 @@ Plot.plot({
       dy: -10,              // adjust vertical position if needed
       fill: "blue",
       fontWeight: "bold"
-    })
+    }),
+
+    // Vertical average bars
+    Plot.ruleX(avgPoints, {
+      x: "x",
+      y1: 0,
+      y2: "y",
+      stroke: d => d.x < fareChange ? "blue" : "green",
+      strokeWidth: 3,
+      opacity: 0.7
+    }),
+
+    // Average labels
+    Plot.text(avgPoints, {
+      x: "x",
+      y: "y",
+      text: d => d.label,
+      dy: -8,
+      fill: d => d.x < fareChange ? "blue" : "green",
+      textAnchor: "middle",
+      fontWeight: "bold",
+      fontSize: 11
+    }),
+    // Baseline (y = 0)
+    Plot.ruleY([0])
   ]
 })
 ```
