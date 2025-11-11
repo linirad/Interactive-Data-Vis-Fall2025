@@ -287,6 +287,8 @@ Plot.plot({
 ```
 
 <br>
+<h2 style="white-space: nowrap;">3. Three Stations that need most staffing help for upcoming events</h3>
+
 
 ```js
 Plot.plot({
@@ -305,3 +307,100 @@ Plot.plot({
   ]
 })
   ```
+
+```js
+const eventsWithStaff = upcoming_events.map(d => ({
+  ...d,  // Copy all original fields (date, event_name, nearby_station, estimated_attendance)
+  staff_count: currentStaffing[d.nearby_station] || 0  // Add staff_count from lookup
+}));
+// display(eventsWithStaff)
+```
+
+```js
+// Compute y-values per station
+const stationValues = Object.entries(
+  eventsWithStaff.reduce((acc, d) => {
+    const total = acc[d.nearby_station]?.totalAttendance || 0;
+    const staffCount = d.staff_count;
+    acc[d.nearby_station] = {
+      totalAttendance: total + (d.expected_attendance || 0),
+      staffCount: staffCount // assuming same for all in group
+    };
+    return acc;
+  }, {})
+).map(([station, {totalAttendance, staffCount}]) => ({
+  station,
+  y: staffCount > 0 ? totalAttendance / staffCount : 0
+}));
+```
+
+```js
+// Sort stations by y descending
+const sortedStations = stationValues.sort((a, b) => b.y - a.y).map(d => d.station);
+```
+
+```js
+// Create the plot
+Plot.plot({
+  marginLeft: 80,
+  marginBottom: 100,
+  x: {
+    label: "Station",
+    tickRotate: 90,
+    grid: true,
+    domain: sortedStations
+  },
+  y: {
+    label: "Current Staffing Level Load"
+  },
+  marks: [
+    Plot.frame(),
+    Plot.barY(eventsWithStaff, Plot.groupX(
+      {
+        y: values => {
+          const totalAttendance = values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0);
+          const staffCount = values[0].staff_count;
+          return staffCount > 0 ? totalAttendance / staffCount : 0;
+        }
+      },
+      {
+        x: "nearby_station",
+        fill: "#4f46e5",
+        tip: true
+      }
+    ))
+  ]
+})
+```
+
+<!-- ```js
+Plot.plot({
+  marginLeft: 80,
+  marginBottom: 100,
+  x: {
+    label: "Station",
+    tickRotate: 90,
+    grid: true
+  },
+  y: {
+    label: "Current Staffing Level Load"
+  },
+  marks: [
+    Plot.frame(),
+    Plot.barY(eventsWithStaff, Plot.groupX(
+      {
+        y: (values) => {
+          const totalAttendance = values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0);
+          const staffCount = values[0].staff_count;
+          return staffCount > 0 ? totalAttendance / staffCount : 0;
+        },
+      },
+      {
+        x: "nearby_station",
+        fill: "#4f46e5",
+        tip: true
+      }
+    ))
+      ]
+})
+``` -->
