@@ -126,7 +126,15 @@ Plot.plot({
     Plot.line(selectedStationData, {
       x: "date",
       y: "total_traffic",
-      // tip: true
+      tip: true
+    }),
+        // Trend line
+    Plot.linearRegressionY(selectedStationData, {
+      x: "date",
+      y: "total_traffic",
+      stroke: "red",
+      strokeWidth: 1,
+      strokeDasharray: "5,5"  // Dashed line
     }),
     // dots for the local events that correspond to the selected station
     Plot.dot(selectedEvents, {
@@ -149,28 +157,46 @@ Plot.plot({
         "Total traffic": "total_traffic"
       }
     }),
-    Plot.tip([popularEventWithTraffic], {
-      x: popularEventWithTraffic.date,
-      y: popularEventWithTraffic.total_traffic,
-      channels: {
-        "Most Popular Event": "event_name", 
-      }
-    }),
+    // Plot.tip([popularEventWithTraffic], {
+    //   x: popularEventWithTraffic.date,
+    //   y: popularEventWithTraffic.total_traffic,
+    //   channels: {
+    //     "Most Popular Event": "event_name", 
+    //   }
+    // }),
+        ...(popularEventWithTraffic ? [
+      Plot.dot([popularEventWithTraffic], {
+        x: "date",
+        y: "total_traffic",
+        stroke: "red",
+        fill: "gold",
+        r: 2,
+        strokeWidth: 3
+      }),
+      Plot.tip([popularEventWithTraffic], {
+        x: "date",
+        y: "total_traffic",
+        format: {
+          x: false,  // Hide x (date)
+          y: false   // Hide y (total_traffic)
+         },
+        channels: {
+          "Popular Event 🏆": "event_name",
+          "Total traffic": "total_traffic"
+        }
+      })
+    ] : []),
     Plot.ruleY([0]),
      Plot.ruleX([fareChange], { stroke: "red"}),
      Plot.text([fareChange], {
       x: d => d,
       y: 0,
-      // dy: -100,
-      // dx: 37, 
       text: () => "Fare increase",
-      // rotate: -90,        // rotate text vertically
       textAnchor: "end",  // aligns bottom of text to y=0
       dx: 0,            // move left/right as needed
       dy: -10,              // adjust vertical position if needed
-      fill: "red",
+      fill: "blue",
       fontWeight: "bold"
-      // anchor: "bottom"
     })
   ]
 })
