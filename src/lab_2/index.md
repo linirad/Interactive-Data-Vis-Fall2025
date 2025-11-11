@@ -235,7 +235,7 @@ const avgByStationSeverity = Object.entries(grouped)
 
 ```js
 Plot.plot({
-  marginLeft: 80,
+  marginLeft: 110,
   height: 300,
   width,
   title: "Station-wise average response time",
@@ -254,13 +254,13 @@ Plot.plot({
       fill: "severity",
       order: ["high", "medium", "low"],
       tip: true,
-      sort: {y: "x"}  // Sort by the x value (avg)
+      sort: {y: "-x"}  // Sort by the x value (avg)
     })
   ]
 })
 ```
 
-
+<br>
 
 ```js
 Plot.plot({
