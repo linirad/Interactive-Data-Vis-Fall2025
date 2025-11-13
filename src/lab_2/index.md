@@ -294,6 +294,7 @@ ${resize((width) => Plot.plot({
 </div>
 ```
 
+<b>FINDING</b>
 
 ```js
 // Compute change rate
@@ -309,9 +310,10 @@ const markdownOutput = `
 
 ${
   changeRate >= 0 
-    ? `📈 Ridership increased by ${changeRate.toFixed(2)}% after the fare change.` 
-    : `📉 Ridership decreased by ${Math.abs(changeRate).toFixed(2)}% after the fare change.`
+    ? `📈 Ridership increased by ${changeRate.toFixed(2)}% after the fare increase.` 
+    : `📉 Ridership decreased by ${Math.abs(changeRate).toFixed(2)}% after the fare increase.`
 }
+\n The chart shows that ridership consistently goes up on event days and most popular event for each station is flagged.
 `;
 
 display(markdownOutput);
@@ -405,6 +407,10 @@ Plot.plot({
 ```
 
 <br>
+<b>FINDING:</b> The plot shows that 59 St. Columbus Circle has the best averge response time and Fulton St. has the worst. 
+<br>
+<br>
+
 <h2 style="white-space: nowrap;">3. Three Stations that need most staffing help for upcoming events</h3>
 
 
@@ -450,12 +456,13 @@ const stationValues = Object.entries(
   station,
   y: staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0
 }));
-display(stationValues)
+// display(stationValues)
 ```
 
 ```js
 // Sort stations by y descending
 const sortedStations = stationValues.sort((a, b) => b.y - a.y).map(d => d.station);
+const top3Stations = sortedStations.slice(0, 3);
 ```
 
 ```js
@@ -470,7 +477,7 @@ Plot.plot({
     domain: sortedStations
   },
   y: {
-    label: "Current Staffing Level Load"
+    label: "Projected Staffing Level Load for 2026 Events"
   },
   marks: [
     Plot.frame(),
@@ -479,22 +486,23 @@ Plot.plot({
         y: values => {
           const totalAttendance = values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0);
           const staffCount = values[0].staff_count;
-          // const exp_attendance = d.expected_attendance;
           return staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0;
         },
-        // Add extra channels for tooltip
-        // totalAttendance: values => values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0),
-        // totalStaff: values => values.reduce((sum, d) => sum + (d.staff_count || 0), 0)
-    },
-      {
-        x: "nearby_station",
-        fill: "#4f46e5",
-        tip: true
-      }
+        fill: values => (top3Stations.includes(values[0].nearby_station) ? "crimson" : "#bbb"),
+        tip: values => {
+          const totalAttendance = values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0);
+          const staffCount = values[0].staff_count;
+          const load = staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0;
+          return `${values[0].nearby_station}: ${load} per staff`;
+        }
+      },
+      { x: "nearby_station" }
     ))
   ]
 })
 ```
+
+<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load as per current staffing levels. The plot shows that the top 3 stations that will require staffing help are 
 
 <!-- ```js
 Plot.plot({
