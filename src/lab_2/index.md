@@ -45,7 +45,8 @@ const currentStaffing = {
 ```
 
 ```js
-const allStations = Array.from(new Set(ridership.map(d => d.station)))
+// const allStations = Array.from(new Set(ridership.map(d => d.station)))
+const allStations = ["All Stations", ...Array.from(new Set(ridership.map(d => d.station)))]
 // const selectedStation = view(Inputs.select(allStations))
 const fareChange = new Date("2025-07-15")
 ```
@@ -90,11 +91,36 @@ const anotherSelectedStation = view(Inputs.select(allStations))
 ```
 
 ```js
-const selectedStationData = ridership.filter(d => d.station === anotherSelectedStation).map(d => ({
-    ...d,  // Keep all existing fields
-    total_traffic: (d.entrances || 0) + (d.exits || 0)
-  })) 
-const selectedEvents = local_events.filter(d => d["nearby_station"].includes(anotherSelectedStation))
+// Aggregate or filter data based on selection
+const selectedStationData = (anotherSelectedStation === "All Stations" 
+  ? Array.from(
+      ridership.reduce((acc, d) => {
+        const dateKey = d.date.toDateString();
+        if (!acc.has(dateKey)) {
+          acc.set(dateKey, { date: d.date, entrances: 0, exits: 0, station: "All Stations" });
+        }
+        const current = acc.get(dateKey);
+        current.entrances += d.entrances || 0;
+        current.exits += d.exits || 0;
+        return acc;
+      }, new Map()).values()
+    )
+  : ridership.filter(d => d.station === anotherSelectedStation)
+).map(d => ({
+  ...d,
+  total_traffic: (d.entrances || 0) + (d.exits || 0)
+})).sort((a, b) => a.date - b.date);
+
+// Filter events based on selection
+const selectedEvents = anotherSelectedStation === "All Stations"
+  ? local_events
+  : local_events.filter(d => d["nearby_station"].includes(anotherSelectedStation));
+
+// const selectedStationData = ridership.filter(d => d.station === anotherSelectedStation).map(d => ({
+//     ...d,  // Keep all existing fields
+//     total_traffic: (d.entrances || 0) + (d.exits || 0)
+//   })) 
+// const selectedEvents = local_events.filter(d => d["nearby_station"].includes(anotherSelectedStation))
 // display(selectedStationData[0])
 
 // Find the date with highest traffic
@@ -132,13 +158,20 @@ const avgPoints = [
   { x: xBefore, y: avgBefore, label: `Avg ridership before fare rise: ${avgBefore.toFixed(0)}` },
   { x: xAfter,  y: avgAfter,  label: `Avg ridership after fare rise: ${avgAfter.toFixed(0)}` }
 ];
+
+// Compute change rate (percentage)
+const changeRate = ((avgAfter - avgBefore) / avgBefore) * 100;
+console.log(`Ridership change rate: ${changeRate.toFixed(2)}%`);
 ```
 
-```js
-Plot.plot({
+```html
+<div class="card">
+${resize((width) => Plot.plot({
   height: 300, 
   width,
-  title: "Station-wise Total Traffic",
+  title: anotherSelectedStation === "All Stations" 
+    ? "Overall System Total Traffic" 
+    : `${anotherSelectedStation} Total Traffic`,
   marks: [
     Plot.frame(),
     // the line based on the filtered (selected) station data
@@ -147,7 +180,7 @@ Plot.plot({
       y: "total_traffic",
       tip: true
     }),
-        // Trend line
+    // Trend line
     Plot.linearRegressionY(selectedStationData, {
       x: "date",
       y: "total_traffic",
@@ -157,13 +190,9 @@ Plot.plot({
     }),
     // dots for the local events that correspond to the selected station
     Plot.dot(selectedEvents, {
-      x: "date", // position at the event date
+      x: "date",
       y: eventDataObj => {
-        // console.log("event data:", eventDataObj)
-        // find the station data for this date
         const stationData = selectedStationData.find(stationDataObj => { 
-          // console.log("station data:", stationDataObj)
-          // which station data matches this event data date?
           return eventDataObj.date.toDateString() === stationDataObj.date.toDateString()
         })
         return stationData ? stationData.total_traffic : null;
@@ -172,18 +201,18 @@ Plot.plot({
       fill: "white",
       tip: true,
       channels: {
-        "Event": "event_name", 
-        "Total traffic": "total_traffic"
+        "Event": "event_name",
+        ...(anotherSelectedStation === "All Stations" ? { "Station": "nearby_station" } : {}),
+        "Total traffic": eventDataObj => {
+          const stationData = selectedStationData.find(stationDataObj => 
+            eventDataObj.date.toDateString() === stationDataObj.date.toDateString()
+          );
+          return stationData ? stationData.total_traffic : null;
+        }
       }
     }),
-    // Plot.tip([popularEventWithTraffic], {
-    //   x: popularEventWithTraffic.date,
-    //   y: popularEventWithTraffic.total_traffic,
-    //   channels: {
-    //     "Most Popular Event": "event_name", 
-    //   }
-    // }),
-        ...(popularEventWithTraffic ? [
+    // Dot and Annotation for most popular event
+    ...(popularEventWithTraffic ? [
       Plot.dot([popularEventWithTraffic], {
         x: "date",
         y: "total_traffic",
@@ -196,27 +225,27 @@ Plot.plot({
         x: "date",
         y: "total_traffic",
         format: {
-          x: false,  // Hide x (date)
-          y: false   // Hide y (total_traffic)
-         },
+          x: false,
+          y: false
+        },
         channels: {
           "Popular Event 🏆": "event_name",
+          ...(anotherSelectedStation === "All Stations" ? { "Station": "nearby_station" } : {}),
           "Total traffic": "total_traffic"
         }
       })
     ] : []),
-     Plot.ruleX([fareChange], { stroke: "red"}),
-     Plot.text([fareChange], {
+    Plot.ruleX([fareChange], { stroke: "red"}),
+    Plot.text([fareChange], {
       x: d => d,
       y: 0,
       text: () => "Fare increase",
-      textAnchor: "end",  // aligns bottom of text to y=0
-      dx: 0,            // move left/right as needed
-      dy: -10,              // adjust vertical position if needed
-      fill: "blue",
+      textAnchor: "end",
+      dx: 0,
+      dy: -10,
+      fill: "red",
       fontWeight: "bold"
     }),
-
     // Vertical average bars
     Plot.ruleX(avgPoints, {
       x: "x",
@@ -226,13 +255,12 @@ Plot.plot({
       strokeWidth: 3,
       opacity: 0.7
     }),
-
     // Average labels
     Plot.text(avgPoints, {
       x: "x",
       y: "y",
       text: d => d.label,
-      dy: -8,
+      dy: 100,
       fill: d => d.x < fareChange ? "blue" : "green",
       textAnchor: "middle",
       fontWeight: "bold",
@@ -241,7 +269,31 @@ Plot.plot({
     // Baseline (y = 0)
     Plot.ruleY([0])
   ]
-})
+}))}
+</div>
+```
+
+
+```js
+// Compute change rate
+const changeRate = ((avgAfter - avgBefore) / avgBefore) * 100;
+
+// Create a Markdown-formatted string
+const markdownOutput = `
+🚆 Ridership Change Summary
+
+- Average before fare rise: ${avgBefore.toFixed(0)}
+- Average after fare rise: ${avgAfter.toFixed(0)}
+- Change rate: ${changeRate.toFixed(2)}%
+
+${
+  changeRate >= 0 
+    ? `📈 Ridership increased by ${changeRate.toFixed(2)}% after the fare change.` 
+    : `📉 Ridership decreased by ${Math.abs(changeRate).toFixed(2)}% after the fare change.`
+}
+`;
+
+display(markdownOutput);
 ```
 
 <br>
@@ -270,7 +322,10 @@ Plot.plot({
       // fy: "station",
       r: 3,
       fillOpacity: 0.6,
-      tip: true
+      tip: true,
+      channels: {
+        Station: "station"
+      }
     }))
   ]
 })
@@ -374,7 +429,7 @@ const stationValues = Object.entries(
   station,
   y: staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0
 }));
-// display(stationValues)
+display(stationValues)
 ```
 
 ```js
@@ -406,7 +461,7 @@ Plot.plot({
           // const exp_attendance = d.expected_attendance;
           return staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0;
         },
-        //       // Add extra channels for tooltip
+        // Add extra channels for tooltip
         // totalAttendance: values => values.reduce((sum, d) => sum + (d.expected_attendance || 0), 0),
         // totalStaff: values => values.reduce((sum, d) => sum + (d.staff_count || 0), 0)
     },
