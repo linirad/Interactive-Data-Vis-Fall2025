@@ -161,19 +161,35 @@ const avgPoints = [
 
 // Compute change rate (percentage)
 const changeRate = ((avgAfter - avgBefore) / avgBefore) * 100;
-console.log(`Ridership change rate: ${changeRate.toFixed(2)}%`);
+// console.log(`Ridership change rate: ${changeRate.toFixed(2)}%`);
+const minDate = new Date(Math.min(...selectedStationData.map(d => d.date)));
+const maxDate = new Date(Math.max(...selectedStationData.map(d => d.date)));
 ```
 
 ```html
 <div class="card">
 ${resize((width) => Plot.plot({
   height: 300, 
+  marginLeft: 50,
   width,
+  grid: true,
   title: anotherSelectedStation === "All Stations" 
     ? "Overall System Total Traffic" 
     : `${anotherSelectedStation} Total Traffic`,
   marks: [
     Plot.frame(),
+    // shading before and after fareChange
+    Plot.rectY([
+      { x1: minDate, x2: fareChange, fill: "#f0f7ff" },
+      { x1: fareChange, x2: maxDate, fill: "#f6cfcfff" }
+    ], {
+      x1: "x1",
+      x2: "x2",
+      y1: null,   // span full vertical range
+      y2: null,   // span full vertical range
+      fill: "fill",
+      opacity: 0.4
+    }),
     // the line based on the filtered (selected) station data
     Plot.line(selectedStationData, {
       x: "date",
@@ -199,7 +215,11 @@ ${resize((width) => Plot.plot({
       },
       stroke: "blue", 
       fill: "white",
-      tip: true,
+      tip: {
+        format: {
+          x: false,
+          y: false
+        },
       channels: {
         "Event": "event_name",
         ...(anotherSelectedStation === "All Stations" ? { "Station": "nearby_station" } : {}),
@@ -210,9 +230,10 @@ ${resize((width) => Plot.plot({
           return stationData ? stationData.total_traffic : null;
         }
       }
+    }
     }),
     // Dot and Annotation for most popular event
-    ...(popularEventWithTraffic ? [
+    ...(popularEventWithTraffic && anotherSelectedStation !== "All Stations" ? [
       Plot.dot([popularEventWithTraffic], {
         x: "date",
         y: "total_traffic",
