@@ -470,6 +470,7 @@ const top3Stations = sortedStations.slice(0, 3);
 Plot.plot({
   marginLeft: 80,
   marginBottom: 100,
+  title: "Projected Staffing Load for Upcoming Events in 2026",
   x: {
     label: "Station",
     tickRotate: 90,
@@ -477,7 +478,7 @@ Plot.plot({
     domain: sortedStations
   },
   y: {
-    label: "Projected Staffing Level Load for 2026 Events"
+    label: "Projected Load Per Staff"
   },
   marks: [
     Plot.frame(),
@@ -502,7 +503,7 @@ Plot.plot({
 })
 ```
 
-<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load as per current staffing levels. The plot shows that the top 3 stations that will require staffing help are 
+<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load per staff using current staffing levels. The plot shows that the top 3 stations that will require staffing help are Canal St, 34th St. Penn Station and 23 St.
 
 <!-- ```js
 Plot.plot({
