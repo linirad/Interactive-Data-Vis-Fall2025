@@ -176,6 +176,9 @@ ${resize((width) => Plot.plot({
   title: anotherSelectedStation === "All Stations" 
     ? "Overall System Total Traffic" 
     : `${anotherSelectedStation} Total Traffic`,
+  y: {   // <-- add this
+    label: "Total Traffic"
+  },
   marks: [
     Plot.frame(),
     // shading before and after fareChange
@@ -414,7 +417,7 @@ ${Plot.plot({
 
 
 <br>
-<b>FINDING:</b> The plot shows that 59 St. Columbus Circle has the best averge response time and Fulton St. has the worst. 
+<b>FINDING:</b> The plot shows that <b>59 St. Columbus Circle</b> has the <b>best</b> average response time and <b>Fulton St.</b> has the <b>worst</b>. 
 <br>
 <br>
 
@@ -506,11 +509,11 @@ ${Plot.plot({
 </div>
 
 
-<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load per staff using current staffing levels. The plot shows that the top 3 stations that will require staffing help are Canal St, 34th St. Penn Station and 23 St.
+<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load per staff using current staffing levels. The plot shows that the top 3 stations that will require staffing help are <b>Canal St, 34th St. Penn Station and 23 St</b>.
 
 <br>
 
-<h2 style="white-space: nowrap;">4. Three Stations that need most staffing help for upcoming events</h3>
+<h2 style="white-space: nowrap;">4. Prioritize one station for increased staffing</h3>
 
 ```js
 // Compute first factor for prioritization of one station - Average ridership 
@@ -621,7 +624,7 @@ allStations1.forEach(station => {
   const norm3 = d3Max !== d3Min ? 1 - (v3 - d3Min) / (d3Max - d3Min) : 0; // invert response time
 
   // Composite score with 33.33% weight each
-  const composite_score = Number((norm1 * 0.20 + norm2 * 0.50 + norm3 * 0.30).toFixed(3));
+  const composite_score = Number((norm1 * 0.20 + norm2 * 0.60 + norm3 * 0.20).toFixed(3));
 
   compositeScores.push({ station, composite_score });
 });
@@ -660,7 +663,7 @@ ${Plot.plot({
   },
   y: {
     label: "Station",
-    domain: sortedStations1.map(d => d.station) // set y-axis order
+    domain: sortedStations1.slice(0,10).map(d => d.station) // set y-axis order
   },
   height: 400,
   width: 800,
@@ -668,6 +671,8 @@ ${Plot.plot({
 })
 }
 </div>
+
+<b>FINDING:</b> Based on the composite score computed for each station with a weightage of 60% for total expected attendance for upcoming events in 2026, 20% for average ridership and 20% for average incident response time, the station that can be prioritized for increased staffing is <b>Canal St</b>.
 
 <!-- ```js
 //Q3. - Earlier attempt with computation of per staff load in plot.plot. Above is simplified to precompute per staff load before plotting.
