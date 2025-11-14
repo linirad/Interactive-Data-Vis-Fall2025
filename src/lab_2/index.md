@@ -407,7 +407,7 @@ ${Plot.plot({
       fill: "severity",
       order: ["high", "medium", "low"],
       tip: true,
-      sort: {y: "-x"}  // Sort by the x value (avg)
+      sort: {y: "x"}  // Sort by the x value (avg)
     })
   ]
 })
@@ -417,7 +417,7 @@ ${Plot.plot({
 
 
 <br>
-<b>FINDING:</b> The plot shows that <b>59 St. Columbus Circle</b> has the <b>best</b> average response time and <b>Fulton St.</b> has the <b>worst</b>. 
+<b>FINDING:</b> The plot shows that <b>59 St. Columbus Circle</b> has the <b>worst</b> average response time and <b>Fulton St.</b> has the <b>best</b>. 
 <br>
 <br>
 
