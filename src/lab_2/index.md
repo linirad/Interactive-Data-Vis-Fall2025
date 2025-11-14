@@ -323,8 +323,8 @@ display(markdownOutput);
 
 <h2 style="white-space: nowrap;">2. Compare response times across stations</h3>
 
-```js
-Plot.plot({
+<div class="card">
+${Plot.plot({
   height: 300,
   width,
   title: "Response time for incidents across all stations",
@@ -352,7 +352,8 @@ Plot.plot({
     }))
   ]
 })
-```
+}
+</div>
 
 <br>
 
@@ -374,13 +375,16 @@ const avgByStationSeverity = Object.entries(grouped)
     station: rows[0].station,
     severity: rows[0].severity,
     // Calculate average response time
-    avg: rows.reduce((sum, r) => sum + (+r.response_time_minutes || 0), 0) / rows.length // Divide total by count
+    avg: Number((rows.reduce((sum, r) => sum + (+r.response_time_minutes || 0), 0) / rows.length).toFixed(2)) // Divide total by count
   }))
-  .sort((a, b) => a.station.localeCompare(b.station) || a.avg - b.avg); // Sort by station name first then avg
+  .sort((a, b) => a.station.localeCompare(b.station) || a.avg - b.avg); // Sort by station name first then avg;
+
+// display(avgByStationSeverity);
 ```
 
-```js
-Plot.plot({
+
+<div class="card">
+${Plot.plot({
   marginLeft: 110,
   height: 300,
   width,
@@ -404,7 +408,10 @@ Plot.plot({
     })
   ]
 })
-```
+}
+</div>
+
+
 
 <br>
 <b>FINDING:</b> The plot shows that 59 St. Columbus Circle has the best averge response time and Fulton St. has the worst. 
@@ -415,7 +422,72 @@ Plot.plot({
 
 
 ```js
-Plot.plot({
+// Add staff count to events
+const eventsWithStaff = upcoming_events.map(d => ({
+  ...d,
+  staff_count: currentStaffing[d.nearby_station] || 0
+}));
+
+// Aggregate total attendance per station
+const stationAggregates = Object.entries(
+  eventsWithStaff.reduce((acc, d) => {
+    const total = acc[d.nearby_station]?.totalAttendance || 0;
+    const staffCount = d.staff_count;
+    acc[d.nearby_station] = {
+      totalAttendance: total + (d.expected_attendance || 0),
+      staffCount: staffCount
+    };
+    return acc;
+  }, {})
+).map(([station, { totalAttendance, staffCount }]) => ({
+  station,
+  staffCount,
+  totalAttendance,
+  perStaffLoad: staffCount > 0 ? Math.ceil(totalAttendance / staffCount) : 0
+}));
+
+// display(stationAggregates);
+// Sort stations by per-staff load descending
+const sortedStations = stationAggregates
+  .sort((a, b) => b.perStaffLoad - a.perStaffLoad)
+  .map(d => d.station);
+
+// Top 3 stations
+const top3Stations = stationAggregates
+  .sort((a, b) => b.perStaffLoad - a.perStaffLoad)
+  .slice(0, 3)
+  .map(d => d.station);
+
+```
+
+
+<div class="grid grid-cols-2">
+  <!-- first column -->
+  <div class="card">
+  ${Plot.plot({
+    marginLeft: 80,
+    marginBottom: 100,
+    title: "Projected Staffing Load for Upcoming Events in 2026",
+    x: { label: "Station", tickRotate: 90, grid: true, domain: sortedStations },
+    y: { label: "Projected Load Per Staff" },
+    marks: [
+      Plot.frame(),
+      Plot.barY(
+        stationAggregates,
+        {
+          x: "station",
+          y: "perStaffLoad",
+          fill: d => top3Stations.includes(d.station) ? "crimson" : "#bbb",
+          tip: d => `${d.station}: ${d.perStaffLoad} per staff (Staff: ${d.staffCount}, Attendance: ${d.totalAttendance})`
+        }
+      )
+    ]
+  })
+  }
+</div>
+<!-- second column -->
+<div class="card">
+${Plot.plot({
   marginLeft: 80,
   x: {
     label: "Response Time (minutes)",
@@ -429,10 +501,176 @@ Plot.plot({
       {r: "count"}, {x: "staffing_count", y: "response_time_minutes", tip: true, fill: "severity", sort: {y: "x"}}
       ))
   ]
-})
-  ```
+})}
+</div>
+</div>
+
+
+<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load per staff using current staffing levels. The plot shows that the top 3 stations that will require staffing help are Canal St, 34th St. Penn Station and 23 St.
+
+<br>
+
+<h2 style="white-space: nowrap;">4. Three Stations that need most staffing help for upcoming events</h3>
 
 ```js
+// Compute first factor for prioritization of one station - Average ridership 
+const stationAverages = ridership.reduce((acc, d) => {
+  const station = d.station;
+  const total = (d.entrances || 0) + (d.exits || 0);
+
+  if (!acc[station]) {
+    acc[station] = { station, sum: 0, count: 0 };
+  }
+
+  acc[station].sum += total;
+  acc[station].count += 1;
+
+  return acc;
+}, {});
+
+const averageRidership = Object.values(stationAverages).map(s => ({
+  station: s.station,
+  avg_total: Math.ceil(s.sum / s.count)
+}));
+// display(averagesArray);
+
+// second factor - upcoming events stationAggregates
+// display(stationAggregates)
+
+// Third factor - average response time for incident per staff
+// Group incidents by station only (no more severity grouping)
+const score_grouped = incidents.reduce((acc, d) => {
+  const station = d.station;
+
+  if (!acc[station]) acc[station] = [];
+  acc[station].push(d);
+
+  return acc;
+}, {});
+
+// Compute station-wise average response_time_minutes per staffing_count
+// Group incidents by station only (ignore severity)
+const grouped1 = incidents.reduce((acc, d) => {
+  const station = d.station;  // Only station, ignore severity
+
+  if (!acc[station]) acc[station] = [];
+  acc[station].push(d);
+
+  return acc;
+}, {});
+
+// Compute station-wise avg_response_time_per_staff
+const incidentAvgByStation = Object.entries(grouped1)
+  .map(([station, rows]) => {
+    const totalResponse1 = rows.reduce(
+      (sum, r) => sum + (+r.response_time_minutes || 0),
+      0
+    );
+
+    const totalStaff1 = rows.reduce(
+      (sum, r) => sum + (+r.staffing_count || 0),
+      0
+    );
+
+    const avgPerStaff1 = totalStaff1 > 0
+      ? Number((totalResponse1 / totalStaff1).toFixed(2))
+      : 0;
+
+    return {
+      station,
+      avg_response_time_per_staff: avgPerStaff1
+    };
+  })
+  .sort((a, b) => a.station.localeCompare(b.station));
+
+
+// display(avgByStation1);
+
+// 1. Collect all unique stations
+const allStations1 = new Set([
+  ...averageRidership.map(d => d.station),
+  ...stationAggregates.map(d => d.station), //Aggregate total attendance per station for upcoming events in 2026
+  ...incidentAvgByStation.map(d => d.station)
+]);
+
+// 2. Compute min/max for each metric
+const d1Values = averageRidership.map(d => d.avg_total);
+const d2Values = stationAggregates.map(d => d.perStaffLoad);
+const d3Values = incidentAvgByStation.map(d => d.avg_response_time_per_staff);
+
+const d1Min = Math.min(...d1Values), d1Max = Math.max(...d1Values);
+const d2Min = Math.min(...d2Values), d2Max = Math.max(...d2Values);
+const d3Min = Math.min(...d3Values), d3Max = Math.max(...d3Values);
+
+// 3. Convert arrays to lookup maps
+const map1 = Object.fromEntries(averageRidership.map(d => [d.station, d.avg_total]));
+const map2 = Object.fromEntries(stationAggregates.map(d => [d.station, d.perStaffLoad]));
+const map3 = Object.fromEntries(incidentAvgByStation.map(d => [d.station, d.avg_response_time_per_staff]));
+
+// 4. Compute composite scores with 33.33% weightage each
+const compositeScores = [];
+
+allStations1.forEach(station => {
+  const v1 = map1[station] ?? 0;  // avg_total
+  const v2 = map2[station] ?? 0;  // perStaffLoad
+  const v3 = map3[station] ?? 0;  // avg_response_time_per_staff
+
+  // Normalize 0–1 scale
+  const norm1 = d1Max !== d1Min ? (v1 - d1Min) / (d1Max - d1Min) : 0;
+  const norm2 = d2Max !== d2Min ? (v2 - d2Min) / (d2Max - d2Min) : 0;
+  const norm3 = d3Max !== d3Min ? 1 - (v3 - d3Min) / (d3Max - d3Min) : 0; // invert response time
+
+  // Composite score with 33.33% weight each
+  const composite_score = Number((norm1 * 0.20 + norm2 * 0.50 + norm3 * 0.30).toFixed(3));
+
+  compositeScores.push({ station, composite_score });
+});
+
+// 5. Sort by composite_score descending
+compositeScores.sort((a, b) => b.composite_score - a.composite_score);
+
+// Sort ascending by composite_score
+compositeScores.sort((a, b) => a.composite_score - b.composite_score);
+// display(compositeScores);
+```
+
+```js
+// Sort descending by composite_score for axis ordering
+const sortedStations1 = compositeScores
+  .slice()
+  .sort((a, b) => b.composite_score - a.composite_score);
+```
+
+<div class="card">
+${Plot.plot({
+  marks: [
+    Plot.barX(sortedStations1, {
+      y: "station",
+      x: "composite_score",
+      fill: d => d === sortedStations1[0] ? "red" : "lightgrey", // top station red
+      tip: true,
+      title: d => `${d.station}: ${d.composite_score}` // tooltip
+    })
+  ],
+  x: {
+    grid: true,
+    label: "Composite Score",
+    tickFormat: ".2f",
+    domain: [0, 1]
+  },
+  y: {
+    label: "Station",
+    domain: sortedStations1.map(d => d.station) // set y-axis order
+  },
+  height: 400,
+  width: 800,
+  marginLeft: 150
+})
+}
+</div>
+
+<!-- ```js
+//Q3. - Earlier attempt with computation of per staff load in plot.plot. Above is simplified to precompute per staff load before plotting.
 const eventsWithStaff = upcoming_events.map(d => ({
   ...d,  // Copy all original fields (date, event_name, nearby_station, estimated_attendance)
   staff_count: currentStaffing[d.nearby_station] || 0  // Add staff_count from lookup
@@ -501,11 +739,10 @@ Plot.plot({
     ))
   ]
 })
-```
-
-<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load per staff using current staffing levels. The plot shows that the top 3 stations that will require staffing help are Canal St, 34th St. Penn Station and 23 St.
+``` -->
 
 <!-- ```js
+// Q3 - First attempt
 Plot.plot({
   marginLeft: 80,
   marginBottom: 100,
