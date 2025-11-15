@@ -51,6 +51,12 @@ const allStations = ["All Stations", ...Array.from(new Set(ridership.map(d => d.
 const fareChange = new Date("2025-07-15")
 ```
 
+<div class="card" style="font-size: 1.1rem; line-height: 1.5; padding: 1rem; background-color: #f0f8ff;">
+<b>SUBWAY STATION DASHBOARD:</b> 
+The dashboard features plots that utilize the Manhattan subway stations operational data on ridership, incidents, local events and upcoming events to answer questions around the impact of local events on ridership in summer 2025, comparative study of response time across stations, the top 3 stations that need staffing help in summer 2026 and the one station that most needs increased staffing. 
+</div>
+
+
 <!-- ```js
 // First attempt at plot for Q1
 Plot.plot({
@@ -164,6 +170,14 @@ const changeRate = ((avgAfter - avgBefore) / avgBefore) * 100;
 // console.log(`Ridership change rate: ${changeRate.toFixed(2)}%`);
 const minDate = new Date(Math.min(...selectedStationData.map(d => d.date)));
 const maxDate = new Date(Math.max(...selectedStationData.map(d => d.date)));
+
+// Does this selected station have any events?
+const hasEventsForStation = selectedEvents.some(ev =>
+  ev.nearby_station === anotherSelectedStation
+);
+// Final condition for showing tooltip
+const shouldShowTooltip =
+  anotherSelectedStation !== "All Stations" && !hasEventsForStation;
 ```
 
 ```html
@@ -176,7 +190,7 @@ ${resize((width) => Plot.plot({
   title: anotherSelectedStation === "All Stations" 
     ? "Overall System Total Traffic" 
     : `${anotherSelectedStation} Total Traffic`,
-  y: {   // <-- add this
+  y: {   
     label: "Total Traffic"
   },
   marks: [
@@ -197,7 +211,14 @@ ${resize((width) => Plot.plot({
     Plot.line(selectedStationData, {
       x: "date",
       y: "total_traffic",
-      tip: true
+    // SHOW tooltip only if no events exist, hide it otherwise
+      tip: shouldShowTooltip
+      ? {
+          channels: {
+            "Total Traffic": d => d.total_traffic.toLocaleString()
+          }
+        }
+      : false
     }),
     // Trend line
     Plot.linearRegressionY(selectedStationData, {
@@ -259,7 +280,7 @@ ${resize((width) => Plot.plot({
         }
       })
     ] : []),
-    Plot.ruleX([fareChange], { stroke: "red"}),
+    Plot.ruleX([fareChange], { stroke: "red", strokeDasharray: "2,2"}),
     Plot.text([fareChange], {
       x: d => d,
       y: 0,
@@ -276,7 +297,8 @@ ${resize((width) => Plot.plot({
       y1: 0,
       y2: "y",
       stroke: d => d.x < fareChange ? "blue" : "green",
-      strokeWidth: 3,
+      strokeWidth: 2,
+      strokeDasharray: "2,2",
       opacity: 0.7
     }),
     // Average labels
@@ -297,36 +319,37 @@ ${resize((width) => Plot.plot({
 </div>
 ```
 
-<b>FINDING</b>
 
-```js
-// Compute change rate
-const changeRate = ((avgAfter - avgBefore) / avgBefore) * 100;
+<div class="card" style="font-size: 1.1rem; line-height: 1.5; padding: 1rem; background-color: #f0f8ff;">
+  <b>FINDING:</b><br>
 
-// Create a Markdown-formatted string
-const markdownOutput = `
-🚆 Ridership Change Summary
+  <b style="font-size:1.2rem;">🚆 Ridership Change Summary</b>
 
-- Average before fare rise: ${avgBefore.toFixed(0)}
-- Average after fare rise: ${avgAfter.toFixed(0)}
-- Change rate: ${changeRate.toFixed(2)}%
+  <ul>
+    <li>Average before fare rise: <b>${avgBefore.toFixed(0)}</b></li>
+    <li>Average after fare rise: <b>${avgAfter.toFixed(0)}</b></li>
+    <li>Change rate: <b>${changeRate.toFixed(2)}%</b></li>
+  </ul>
 
-${
-  changeRate >= 0 
-    ? `📈 Ridership increased by ${changeRate.toFixed(2)}% after the fare increase.` 
-    : `📉 Ridership decreased by ${Math.abs(changeRate).toFixed(2)}% after the fare increase.`
-}
-\n The chart shows that ridership consistently goes up on event days and most popular event for each station is flagged.
-`;
+  <p>
+    ${
+      changeRate >= 0
+        ? html`📈 Ridership increased by <b>${changeRate.toFixed(2)}%</b> after the fare increase.`
+        : html`📉 Ridership decreased by <b>${Math.abs(changeRate).toFixed(2)}%</b> after the fare increase.`
+    }
+  </p>
 
-display(markdownOutput);
-```
+  <div style="width: 100%; display: block; margin-top: 1rem;">
+    <b>Impact of Summer 2025 Local Events: </b> The chart shows that ridership consistently went up on event days and the most popular event for each station is flagged.
+  </div>
+</div>
+
 
 <br>
 
 <h2 style="white-space: nowrap;">2. Compare response times across stations</h3>
 
-<div class="card">
+<!-- <div class="card">
 ${Plot.plot({
   height: 300,
   width,
@@ -356,7 +379,7 @@ ${Plot.plot({
   ]
 })
 }
-</div>
+</div> -->
 
 <br>
 
@@ -414,11 +437,10 @@ ${Plot.plot({
 }
 </div>
 
-
-
-<br>
+<div class="card" style="font-size: 1.1rem; line-height: 1.5; padding: 1rem; background-color: #f0f8ff;">
 <b>FINDING:</b> The plot shows that <b>59 St. Columbus Circle</b> has the <b>worst</b> average response time and <b>Fulton St.</b> has the <b>best</b>. 
-<br>
+</div>
+
 <br>
 
 <h2 style="white-space: nowrap;">3. Three Stations that need most staffing help for upcoming events</h3>
@@ -463,23 +485,20 @@ const top3Stations = stationAggregates
 
 ```
 
-
-<div class="grid grid-cols-2">
-  <!-- first column -->
-  <div class="card">
+<div class="card">
   ${Plot.plot({
-    marginLeft: 80,
-    marginBottom: 100,
+    marginLeft: 120,
+    width,
     title: "Projected Staffing Load for Upcoming Events in 2026",
-    x: { label: "Station", tickRotate: 90, grid: true, domain: sortedStations },
-    y: { label: "Projected Load Per Staff" },
+    y: { label: "Station", grid: true, domain: sortedStations },
+    x: { label: "Projected Load Per Staff" },
     marks: [
       Plot.frame(),
-      Plot.barY(
+      Plot.barX(
         stationAggregates,
         {
-          x: "station",
-          y: "perStaffLoad",
+          y: "station",
+          x: "perStaffLoad",
           fill: d => top3Stations.includes(d.station) ? "crimson" : "#bbb",
           tip: d => `${d.station}: ${d.perStaffLoad} per staff (Staff: ${d.staffCount}, Attendance: ${d.totalAttendance})`
         }
@@ -488,7 +507,8 @@ const top3Stations = stationAggregates
   })
   }
 </div>
-<!-- second column -->
+
+<!-- second column
 <div class="card">
 ${Plot.plot({
   marginLeft: 80,
@@ -505,11 +525,11 @@ ${Plot.plot({
       ))
   ]
 })}
-</div>
-</div>
+</div> -->
 
-
-<b>FINDING</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load per staff using current staffing levels. The plot shows that the top 3 stations that will require staffing help are <b>Canal St, 34th St. Penn Station and 23 St</b>.
+<div class="card" style="font-size: 1.1rem; line-height: 1.5; padding: 1rem; background-color: #f0f8ff;">
+<b>FINDING:</b> Based on the expected attendance for upcoming events in 2026, the plot shows the projected staffing load per staff using current staffing levels. The plot shows that the top 3 stations that will require staffing help are <b>Canal St, 34th St. Penn Station and 23 St</b>.
+</div>
 
 <br>
 
@@ -665,19 +685,20 @@ ${Plot.plot({
     label: "Station",
     domain: sortedStations1.slice(0,10).map(d => d.station) // set y-axis order
   },
-  height: 400,
-  width: 800,
+  width,
   marginLeft: 150
 })
 }
 </div>
 
+<div class="card" style="font-size: 1.1rem; line-height: 1.5; padding: 1rem; background-color: #f0f8ff;">
 <b>FINDING:</b> Based on the composite score computed for each station with a weightage of 60% for total expected attendance for upcoming events in 2026, 20% for average ridership and 20% for average incident response time, the station that can be prioritized for increased staffing is <b>Canal St</b>.
+</div>
 
 <!-- ```js
 //Q3. - Earlier attempt with computation of per staff load in plot.plot. Above is simplified to precompute per staff load before plotting.
 const eventsWithStaff = upcoming_events.map(d => ({
-  ...d,  // Copy all original fields (date, event_name, nearby_station, estimated_attendance)
+  ...d,  // Copy all original fields (date, event_name, nearby_station, expected_attendance)
   staff_count: currentStaffing[d.nearby_station] || 0  // Add staff_count from lookup
 }));
 // display(eventsWithStaff)
