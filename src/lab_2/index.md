@@ -691,8 +691,10 @@ ${Plot.plot({
 }
 </div>
 
-<div class="card" style="font-size: 1.1rem; line-height: 1.5; padding: 1rem; background-color: #f0f8ff;">
+<div class="card" style="font-size: 1.1rem; line-height: 1.5; padding: 1rem; background-color: #f0f8ff; width: 100%; word-wrap: break-word;">
 <b>FINDING:</b> Based on the composite score computed for each station with a weightage of 60% for total expected attendance for upcoming events in 2026, 20% for average ridership and 20% for average incident response time, the station that can be prioritized for increased staffing is <b>Canal St</b>.
+<br>
+<b>Note</b>: Composite score is computed as (ridership × 0.20) + (event_load × 0.60) + (response_efficiency × 0.20) <br> A higher composite score indicates that the station is busier, each staff member handles more visitors compared to other stations and they take longer to respond to incidents. So, the station with the highest composite score can be prioritized for more staffing to handle the demand more efficiently.
 </div>
 
 <!-- ```js
