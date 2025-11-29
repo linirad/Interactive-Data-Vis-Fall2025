@@ -369,7 +369,7 @@ ${Plot.plot({
     <hr style="border: none; border-top: 1px solid #ccc; margin: 15px 0;"> 
     <h2><b>FINDINGS</b></h2>
     <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
-    The estimated attendance shows that the response to all the events is highest in low income neighborhoods and significantly lower in medium as well as high income areas. Considering the candidate has considerably less support in high income neighborhoods and there are similar concerns across the map, the campaign should make a concerted effort to address their concerns.  
+    The estimated attendance shows that the response to all the events is expected to be highest in low income neighborhoods and significantly lower in medium as well as high income areas. Considering the candidate has considerably less support in high income neighborhoods and there are similar concerns across the map, the campaign should make a concerted effort to address their concerns.  
   </p>
 </div>
 
