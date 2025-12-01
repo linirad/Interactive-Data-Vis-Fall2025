@@ -446,6 +446,19 @@ ${Plot.plot({
   </p>
 </div>
 
+<div class="card" style="background-color: #e9e2dea4;" >
+  <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
+    Recommendation Summary
+  </h1>
+  <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
+  <ul>
+    <li>Identify cause of low voter turnout in low and middle income neighborhoods through GOTV and informed volunteer training.</li>
+    <li>Redistribute time spent and increase candidate presence in low and middle income neighborhoods.</li>
+    <li>Address concerns around policy stances across the map through more focused community meetings and town halls.</li>
+    <li>Focus campaign outreach on spreading awareness about the candidate and his policies.</li>
+  </ul>
+  </p>
+</div>
 
 <!-- ```js
 Plot.plot({
