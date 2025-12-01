@@ -22,7 +22,7 @@ const events = await FileAttachment("data/campaign_events.csv").csv({ typed: tru
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Lab 3: Mayoral Mystery
   </h1> 
-  The dashboard presents an analysis of the data from the recent election cycle collected by the political campaign that includes election results, survey responses to proposed policies and campaign event data. The analysis shows the vote distribution for the candidate vs the opponent, the net support for policies amongst the voters and the potential impact of the Get Out to Vote effort on the turnout rate, the candidate's attempts to connect with the communities and the campaign events. Included are some suggestions to improve the turnout rate and mobilize more support for the candidate.
+  The dashboard presents an analysis of the data from the recent election cycle collected by the political campaign that includes election results, survey responses to proposed policies and campaign event data. The analysis shows the vote distribution for the candidate vs the opponent, the net support for policies amongst the voters and the potential impact of the Get Out to Vote effort on the turnout rate, the candidate's attempts to connect with the communities and the campaign events. Included are some suggestions to improve the voter turnout rate and mobilize more support for the candidate.
 </div>
 
 ```js
