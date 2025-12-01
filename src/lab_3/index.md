@@ -319,22 +319,70 @@ Total Respondents: ${d.count}`
   </p>
 </div>
 
+```js
+  // Calculate overall turnout rate by income category (weighted average)
+  const categoryGroups = {};
+  
+  results.forEach(r => {
+    const cat = r.income_category;
+    if (!categoryGroups[cat]) {
+      categoryGroups[cat] = {
+        totalRegistered: 0,
+        totalVoted: 0
+      };
+    }
+    
+    const totalVoted = r.votes_candidate + r.votes_opponent;
+    categoryGroups[cat].totalRegistered += r.total_registered_voters;
+    categoryGroups[cat].totalVoted += totalVoted;
+  });
+  
+  const overallTurnout = Object.entries(categoryGroups).map(([category, data]) => ({
+    category,
+    overallTurnoutRate: (data.totalVoted / data.totalRegistered) * 100
+  }));
+  // display(overallTurnout);
+  const maxDoors = Math.max(...results.map(r => r.gotv_doors_knocked));
+  const maxTurnout = Math.max(...results.map(r => r.turnout_rate));
+```
+
 <div class="card" style="background-color: #e9e2dea4;" >
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Potential Impact of Get Out to Vote Effort and Candidate Hours Spent on Turnout Rate
   </h1>
 ${Plot.plot({
-  grid: true,
-  x: {label: "GOTV Doors Knocked →"},
-  y: {label: "↑ Turnout Rate"},
-  symbol: {legend: true},
-  marks: [
-    Plot.dot(results, 
-    {x: "gotv_doors_knocked", 
-     y: "turnout_rate", 
-     stroke: "candidate_hours_spent", 
-     symbol: "income_category",
-     tip: true})
+    grid: true,
+    x: {label: "GOTV Doors Knocked →"},
+    y: {label: "↑ Turnout Rate"},
+    symbol: {legend: true},
+    marks: [
+      Plot.dot(results, {
+        x: "gotv_doors_knocked", 
+        y: "turnout_rate", 
+        stroke: "candidate_hours_spent", 
+        symbol: "income_category",
+        tip: true
+      }),
+      // Add horizontal lines for overall turnout by income category
+      Plot.ruleY(overallTurnout, {
+        y: "overallTurnoutRate",
+        stroke: d => {
+          if (d.category === "High") return "#8e44ad";
+          if (d.category === "Medium") return "#f39c12";
+          if (d.category === "Low") return "#27ae60";
+          return "#95a5a6";
+        },
+        strokeWidth: 2,
+        strokeDasharray: "4,4",
+        opacity: 0.6
+      }),
+      // Add always-visible static tips
+      Plot.tip(overallTurnout, {
+        x: maxDoors * 0.5,
+        y: "overallTurnoutRate",
+        title: d => `${d.category}\nOverall Turnout Rate: ${d.overallTurnoutRate.toFixed(1)}%`,
+        anchor: "bottom"
+      })
   ]
 })
 }
