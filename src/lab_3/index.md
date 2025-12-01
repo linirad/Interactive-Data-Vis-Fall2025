@@ -403,7 +403,7 @@ ${Plot.plot({
       Plot.tip(overallTurnout, {
         x: maxDoors * 0.5,
         y: "overallTurnoutRate",
-        title: d => `${d.category}\nOverall Turnout Rate: ${d.overallTurnoutRate.toFixed(1)}%`,
+        title: d => `${d.category} Income Category\nOverall Turnout Rate: ${d.overallTurnoutRate.toFixed(1)}%`,
         anchor: "bottom"
       })
   ]
