@@ -315,7 +315,26 @@ Total Respondents: ${d.count}`
     <hr style="border: none; border-top: 1px solid #ccc; margin: 15px 0;"> 
     <h2><b>FINDINGS</b></h2>
     <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
-    The plot visualizes policy preferences among voters who supported the candidate versus the opponent. The net support on all the policies is higher in the candidate supporters as compared to the opponent supporters except for police reform which has no support in either camps. The responses to the survey reveal insightful details on voter disengagement especially the bipartisan opposition to the candidate's police reform stance, lack of campaign presence in their areas, lack of engagement with the candidate and the voting process in general. The police reform policy stance appears to be a deal breaker for quite a few of the survey participants, The candidate needs to strategize their campaign efforts and improve their outreach programs to cover neglected neighborhoods and have open discussions on their stances on policies to listen to community feedback and find solutions to gain community buy-in.
+    The plot visualizes policy preferences among voters who supported the candidate versus the opponent. The net support on all the policies is higher in the candidate supporters as compared to the opponent supporters except for police reform which has no support in either camps. The <span style="color:red">responses*</span> to the survey reveal insightful details on voter disengagement especially the bipartisan opposition to the candidate's police reform stance, lack of campaign presence in their areas, lack of engagement with the candidate and the voting process in general. The police reform policy stance appears to be a deal breaker for quite a few of the survey participants, The candidate needs to strategize their campaign efforts and improve their outreach programs to cover neglected neighborhoods and have open discussions on their stances on policies to listen to community feedback and find solutions to gain community buy-in.
+    <details>
+      <summary><span style="color:red">*Open Responses from Survey Data</span></summary>
+      <div style="padding: 20px; border: solid 1px; border-radius: 5px; font-size: 0.86rem;">
+        ${display(
+          Inputs.table(
+            survey.filter(
+              d => d.open_response != null 
+            ),
+            {
+              columns: ["open_response", "voted_for"],
+              header: {
+                open_response: "Open Response Comments",
+                voted_for: "Voted For: "
+              }
+            }
+          )
+        )}
+      </div>
+    </details>
   </p>
 </div>
 
