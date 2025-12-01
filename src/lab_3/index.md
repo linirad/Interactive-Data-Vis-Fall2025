@@ -128,7 +128,7 @@ ${Plot.plot({
   <div style="font-size: 13px; margin: 10px 0; width: 100%; max-width: 100%; box-sizing: border-box;">
     <div style="display: flex; align-items: center; margin-bottom: 5px; flex-wrap: wrap;">
       <span style="width:14px; height:14px; border-radius:50%; 
-                   border:1px solid #e30e0eff; margin-right:6px; flex-shrink:0;"></span>
+                   border:1px solid #090808ff; margin-right:6px; flex-shrink:0;"></span>
       <span style="flex: 1 1 auto; min-width: 0;">
         <b>Circle size = GOTV doors knocked</b> (more doors = larger circle)
       </span>
@@ -377,28 +377,23 @@ Total Respondents: ${d.count}`
     Potential Impact of Get Out to Vote Effort and Candidate Hours Spent on Turnout Rate
   </h1>
 ${Plot.plot({
-    grid: true,
-    x: {label: "GOTV Doors Knocked →"},
-    y: {label: "↑ Turnout Rate"},
+  grid: true,
+  x: { label: "GOTV Doors Knocked →" },
+  y: { label: "↑ Turnout Rate" },
     symbol: {legend: true},
     marks: [
       Plot.dot(results, {
         x: "gotv_doors_knocked", 
         y: "turnout_rate", 
-        stroke: "candidate_hours_spent", 
+        stroke: "candidate_hours_spent",  
         symbol: "income_category",
         tip: true
       }),
       // Add horizontal lines for overall turnout by income category
       Plot.ruleY(overallTurnout, {
         y: "overallTurnoutRate",
-        stroke: d => {
-          if (d.category === "High") return "#8e44ad";
-          if (d.category === "Medium") return "#f39c12";
-          if (d.category === "Low") return "#27ae60";
-          return "#95a5a6";
-        },
-        strokeWidth: 2,
+        stroke: "#070606ff",
+        strokeWidth: 1,
         strokeDasharray: "4,4",
         opacity: 0.6
       }),
@@ -415,7 +410,7 @@ ${Plot.plot({
     <hr style="border: none; border-top: 1px solid #ccc; margin: 15px 0;"> 
     <h2><b>FINDINGS</b></h2>
     <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
-    The income category wise analysis of the plot is given below: <ul> <li><b>HIGH INCOME NEIGHBORHOOD:</b> <b>Highest turnout rate</b> despite low numbers of Get Out To Vote (GOTV) doors knocked and although candidate has spent highest number of hours in these neighborhoods that has not translated to support for the candidate as seen in earlier plot.</li> <li><b>MIDDLE INCOME NEIGHBORHOOD:</b> <b>Lowest turnout rate</b>, lowest GOTV doors knocked and the candidate has spent the least amount of hours in these neighborhoods that have still shown more support to the candidate as compared to the opponent.</li><li><b>LOW INCOME NEIGHBORHOOD:</b> The turnout rate is only around 60 percent which is way lower than high income neighborhoods, despite GOTV doors knocked being highest in low income areas and support for the candidate is highest although the candidate has spent considerably less time here than in high income areas.</li> </ul><b>RECOMMENDATION:</b> The GOTV effort does not appear to have the intended effect on the turnout rate and the approach needs to be rethought. The candidate should restrategize his presence in the neighborhoods to address the concerns of the residents in high income areas and redirect some of the time spent to low and middle income areas where there is more support for the candidate. In general, the candidate should increase their outreach in all neigborhoods to understand concerns around policy stances and gain/retain support. In low and middle income neighborhoods, the candidate should increase their presence and find ways to improve the turnout rate.  
+    The income category wise analysis of the plot is given below: <ul> <li><b>HIGH INCOME NEIGHBORHOOD:</b> <b>Highest turnout rate</b> despite low numbers of Get Out To Vote (GOTV) doors knocked and although candidate spent highest number of hours in these neighborhoods that has not translated to support for the candidate as seen in earlier plot.</li> <li><b>MIDDLE INCOME NEIGHBORHOOD:</b> <b>Lowest turnout rate</b>, lowest GOTV doors knocked and the candidate has spent the least amount of hours in these neighborhoods that have still shown more support to the candidate as compared to the opponent.</li><li><b>LOW INCOME NEIGHBORHOOD:</b> The overall turnout rate is only around 60 percent which is way lower than high income neighborhoods, despite GOTV doors knocked being highest in low income areas and support for the candidate is highest although the candidate has spent considerably less time here than in high income areas.</li> </ul><b>RECOMMENDATION:</b> <ul><li>GOTV Effort: <b>Current approach is ineffective and has to be reconsidered to idenfify possible obstacles to voting booth access and/or disengagement from voting process to improve turnout rate.</b></li><li>CANDIDATE PRESENCE: <b>Restrategize presence in high income neighborhoods</b> to address policy concerns of the residents. Redistribute time spent to <b>increase presence in low and middle income areas</b> where there is more support for the candidate. In general, the candidate should increase their outreach in all neigborhoods to understand concerns around policy stances and gain/retain support. <b>In low and middle income neighborhoods, the candidate should find ways to improve the turnout rate.</b></li></ul>  
   </p>
 </div>
 
@@ -440,10 +435,12 @@ ${Plot.plot({
   ]
 })
 }
-    <hr style="border: none; border-top: 1px solid #ccc; margin: 15px 0;"> 
-    <h2><b>FINDINGS</b></h2>
-    <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
-    The estimated attendance shows that the response to all the events is expected to be highest in low income neighborhoods and significantly lower in middle as well as high income areas. Considering the candidate has considerably less support in high income neighborhoods and there are similar concerns across the map, the campaign should make a concerted effort to address the concerns in all the neighborhoods and focus on improving the tunrout rate in middle and low income areas.  
+  <hr style="border: none; border-top: 1px solid #ccc; margin: 15px 0;"> 
+  <h2><b>FINDINGS</b></h2>
+  <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
+  The estimated attendance shows that the response to all the events is expected to be highest in low income neighborhoods and significantly lower in middle as well as high income areas.</p> 
+  <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
+  <b>RECOMMENDATION:</b> Considering the candidate has considerably less support in high income neighborhoods and there are similar concerns across the map, the campaign should make a concerted effort to address the concerns in all the neighborhoods and focus on improving the tunrout rate in middle and low income areas.  
   </p>
 </div>
 
