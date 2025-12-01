@@ -103,7 +103,7 @@ ${Plot.plot({
       },
       //fill: "white",
       fillOpacity: 0.6,
-      stroke: "#e30e0eff",
+      stroke: "#060505ff",
       strokeWidth: 1,
     }),
     Plot.text(districts.features, {
@@ -111,7 +111,14 @@ ${Plot.plot({
       y: d => d3.geoCentroid(d)[1],
       text: d => results.find(r => r.boro_cd === d.properties.BoroCD)?.income_category ?? "",
       fontSize: 7,
-      fill: "black",
+      //fill: "black",
+      fill: d => {
+        const cat = results.find(r => r.boro_cd === d.properties.BoroCD)?.income_category;
+        if (cat === "High") return "#070606ff";    // red
+        if (cat === "Middle") return "#ec370fff";  // yellow
+        if (cat === "Low") return "#410dedff";     // blue
+        return "black";                          // fallback
+      },
       stroke: "black",
       strokeWidth: 0.1,
       textAnchor: "middle"
@@ -128,7 +135,7 @@ ${Plot.plot({
     </div>
     <div style="flex-wrap: wrap;">
       <span style="font-weight:bold;">Income Category Labels:</span>
-      <span style="margin-left:8px;">"High", "Middle", "Low" appears directly on the map</span>
+      <span style="margin-left:8px;color:#070606ff">"High"</span>, "<span style="color:#ec370fff">Middle</span>", "<span style="color:#410dedff">Low</span>" appears directly on the map</span>
     </div>
     <hr style="border: none; border-top: 1px solid #ccc; margin: 15px 0;"> 
     <h2><b>FINDINGS</b></h2>
