@@ -18,7 +18,7 @@ const events = await FileAttachment("data/campaign_events.csv").csv({ typed: tru
 // display(events.slice(0,10))
 ```
 
-<div class="card" style="background-color: #e9e2dea4; padding: 15px; width: 100%; box-sizing: border-box; display: block;">
+<div class="card" style="background-color: #f9f7f5fc; padding: 15px; width: 100%; box-sizing: border-box; display: block;">
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Lab 3: Mayoral Mystery
   </h1> 
@@ -59,7 +59,7 @@ const maxMargin = Math.max(Math.abs(minMargin), Math.abs(maxMarginRaw));
     </div>
 </div> -->
 
-<div class="card" style="background-color: #e9e2dea4; padding: 15px; width: 100%; box-sizing: border-box; display: block;">
+<div class="card" style="background-color: #f9f7f5fc; padding: 15px; width: 100%; box-sizing: border-box; display: block;">
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Vote Distribution by Income Category and GOTV Effort
   </h1>  
@@ -259,7 +259,7 @@ const policyDiverging = policies.flatMap(policy =>
 );
 ```
 
-<div class="card" style="background-color: #e9e2dea4;" >
+<div class="card" style="background-color: #f9f7f5fc;" >
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Net Support for Policies by Voter Group
   </h1>
@@ -374,7 +374,7 @@ Total Respondents: ${d.count}`
   const maxTurnout = Math.max(...results.map(r => r.turnout_rate));
 ```
 
-<div class="card" style="background-color: #e9e2dea4;" >
+<div class="card" style="background-color: #f9f7f5fc;" >
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Potential Impact of Get Out to Vote Effort and Candidate Hours Spent on Turnout Rate
   </h1>
@@ -416,7 +416,7 @@ ${Plot.plot({
   </p>
 </div>
 
-<div class="card" style="background-color: #e9e2dea4;" >
+<div class="card" style="background-color: #f9f7f5fc;" >
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Income Category-wise Estimated Attendance of Events
   </h1>
@@ -446,7 +446,7 @@ ${Plot.plot({
   </p>
 </div>
 
-<div class="card" style="background-color: #e9e2dea4;" >
+<div class="card" style="background-color: #f9f7f5fc;" >
   <h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
     Recommendation Summary
   </h1>
