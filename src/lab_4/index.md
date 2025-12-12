@@ -11,10 +11,10 @@ const suspects = await FileAttachment("data/suspect_activities.csv").csv({ typed
 const quality = await FileAttachment("data/water_quality.csv").csv({ typed: true });
 
 
-display(surveys.slice(0,10));
-display(stations.slice(0,10));
-display(suspects.slice(0,10));
-display(quality.slice(0,10));
+// display(surveys.slice(0,10));
+// display(stations.slice(0,10));
+// display(suspects.slice(0,10));
+// display(quality.slice(0,10));
 
 const threshold = {
   heavy_metals: { concern: 20, limit: 30, label: "Heavy metals (ppb)" },
@@ -31,6 +31,19 @@ const threshold = {
   turbidity: { concern: 10, limit: 26, label: "turbidity NTU"}
 };
 ```
+
+<h1 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left; margin-bottom: 10px;">
+  Lab 4: Clearwater Crisis
+</h1> 
+
+The ecological collapse at Lake Clearwater has witnessed a drastic fall in the fish populations and a concerning rise in contamination levels. One of the establishments operating around the river i.e. Riverside Farm, Clearwater Fishing Lodge, Lakeside resort or ChemTech Manufacturing are likely responsible for the crisis. Let us look at the data to find our culprit. 
+
+<br>
+
+<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+  <i>What does the decline in fish population tell us about contamination levels?</i>
+</h2>
+<br>
 
 ```js
 const sortedSurvey = surveys.sort((a, b) => 
@@ -62,9 +75,10 @@ const biggestDecline = processedData.reduce((min, d) =>
 
 ```js
 Plot.plot({
+  title: "Fish Population Trend at the Four Monitoring Stations",
   height: 500,
   marginLeft: 80,
-  width: 800,
+  width: 600,
   grid: false,
   x: {nice: true, label: "Species count"},
   y: {inset: 5, label: "Species"},
@@ -107,6 +121,18 @@ Plot.plot({
   ]
 })
 ```
+
+<br>
+<!-- <p style="max-width: none; width: 100%; word-wrap: break-word; overflow-wrap: break-word;"> -->
+<p>
+The largest decline is seen in the trout population in the West station with a drop of 30 in the trout count over the two year period. As per recent studies, trout exhibit the highest sensitivity to heavy metal contamination. The Bass population has also declined.
+</p>
+<br>
+
+<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+  <i> Which monitoring station exhibits the highest pollution spike?</i>
+</h2>
+<br>
 
 ```js
 const variables = [
@@ -153,7 +179,8 @@ const maxPoint = long.reduce((max, d) =>
 
 ```js
 Plot.plot({
-  width: 800,
+  title: "Pollution Levels Recorded at the Monitoring Stations",
+  width: 600,
   height: 500,
   facet: {
     data: long,
@@ -212,6 +239,16 @@ Plot.plot({
 })
 ```
 
+<p>
+Once again, the West station exhibits the most spikes in heavy metal contamination with scores ranging from 22.5 to a max of 48.8 ppb, way over the concern threshold of 20 ppb and regulatory limit of 30 ppb. Clearly the West station warrants a closer examination.
+</p>
+
+<br>
+<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+  <i> Which of the suspects operate closest to the West station?</i>
+</h2>
+<br>
+
 ```js
 const distanceFields = [
   "distance_to_chemtech_m",
@@ -236,7 +273,8 @@ const minPointWest = longDistances
 
 ```js
 Plot.plot({
-  width: 800,
+  title: "Proximity of the Suspects to the Monitoring Stations",
+  width: 600,
   height: 500,
   marginBottom: 80, 
   fx: { label: null},
@@ -291,6 +329,15 @@ Plot.plot({
   color: { legend: true }
 })
 ```
+<p>
+ChemTech Manufacturing is closest to the West station, operating at a distance of 800m. Now that we have biological indicators connecting the high trout mortality in the West station to heavy metal contamination and spatial factors holding ChemTech responsible for the pollution spike owing to its close proximity to the West station, we can evaluate if the contamination spike and high mortality coincide with ChemTech’s activities.
+</p>
+
+<br>
+<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+  <i> Are ChemTech’s activities related to the contamination and fish mortality spikes?</i>
+</h2>
+<br>
 
 ```js
 // Filter and parse dates
@@ -300,13 +347,17 @@ chemtechActivities.forEach(d => d.date = new Date(d.date));
 const westTrout = surveys.filter(d => d.station_id === "West" && d.species === "Trout");
 westTrout.forEach(d => d.date = new Date(d.date));
 
+const westBass = surveys.filter(d => d.station_id === "West" && d.species === "Bass");
+westBass.forEach(d => d.date = new Date(d.date));
+
 const westHeavyMetals = quality.filter(d => d.station_id === "West");
 westHeavyMetals.forEach(d => d.date = new Date(d.date));
 ```
 
 ```js
 Plot.plot({
-  width: 800,
+  title: "Effect of ChemTech Activities on Heavy Metals contamination and Fish Mortality",
+  width: 600,
   height: 500,
   marks: [
     // Trout count line
@@ -324,7 +375,20 @@ Plot.plot({
       title: d => `Date: ${d.date.toLocaleDateString()}\nTrout Count: ${d.count} fish`,
       tip: true
     }),
-    
+    Plot.line(westBass, {
+      x: "date",
+      y: "count",
+      stroke: () => "Bass Count",
+      strokeWidth: 2.5
+    }),
+    Plot.dot(westBass, {
+      x: "date",
+      y: "count",
+      fill: () => "Bass Count",
+      r: 5,
+      title: d => `Date: ${d.date.toLocaleDateString()}\nBass Count: ${d.count} fish`,
+      tip: true
+    }),
     // Heavy metals line (scaled to match trout count range)
     Plot.line(westHeavyMetals, {
       x: "date",
@@ -341,7 +405,6 @@ Plot.plot({
       title: d => `Date: ${d.date.toLocaleDateString()}\nHeavy Metals: ${d.heavy_metals_ppb} ppb`,
       tip: true
     }),
-    
     // ChemTech activities as vertical lines
     Plot.ruleX(chemtechActivities, {
       x: "date",
@@ -358,13 +421,20 @@ Plot.plot({
     legend: true,
     domain: [
       "Trout Count", 
+      "Bass Count",
       "Heavy Metals (ppb × 2)", 
       ...new Set(chemtechActivities.map(d => d.activity_type))
     ],
-    range: ["#76b7b2", "#9467bd", "#e15759"]
+    range: ["#76b7b2", "#ff7f0e", "#9467bd", "#e15759"]
   }
 })
 ```
+
+<br>
+<p>
+Following almost every ChemTech maintenance shutdown coincides with a spike in the heavy metals contamination level and a drop in both the trout and bass count. The year-end maintenance shutdown in December 2023 exhibits the highest heavy metal level of 48.8 and a sharp drop in the fish population. The connection is clear as day. <br>
+<b>The data categorically shows that ChemTech Manufacturing and their maintenance shutdowns are the primary culprits responsible for the Clearwater Crisis.</b>
+</p>
 
 <!-- ```js
 // Line chart showing pollutant levels chosen over dropdown selection due to clarity
