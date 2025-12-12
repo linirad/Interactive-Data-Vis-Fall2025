@@ -36,11 +36,11 @@ const threshold = {
   Lab 4: Clearwater Crisis
 </h1> 
 
-The ecological collapse at Lake Clearwater has witnessed a drastic fall in the fish populations and a concerning rise in contamination levels. One of the establishments operating around the river i.e. Riverside Farm, Clearwater Fishing Lodge, Lakeside resort or ChemTech Manufacturing are likely responsible for the crisis. Let us look at the data to find our culprit. 
+The ecological collapse at Lake Clearwater has witnessed a drastic fall in the fish populations and a concerning rise in contamination levels. One of the establishments operating around the river i.e. Riverside Farm, Clearwater Fishing Lodge, Lakeside resort or ChemTech Manufacturing are likely responsible for the crisis. Let us look at the data to find the culprit. 
 
 <br>
 
-<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+<h2>
   <i>What does the decline in fish population tell us about contamination levels?</i>
 </h2>
 <br>
@@ -125,11 +125,11 @@ Plot.plot({
 <br>
 <!-- <p style="max-width: none; width: 100%; word-wrap: break-word; overflow-wrap: break-word;"> -->
 <p>
-The largest decline is seen in the trout population in the West station with a drop of 30 in the trout count over the two year period. As per recent studies, trout exhibit the highest sensitivity to heavy metal contamination. The Bass population has also declined.
+The sharpest decline is seen in the trout population in the West station with a drop of 30 in the trout count over the two year period. As per recent studies, trout exhibit the highest sensitivity to heavy metal contamination. The Bass population has also declined significantly by 23.
 </p>
 <br>
 
-<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+<h2>
   <i> Which monitoring station exhibits the highest pollution spike?</i>
 </h2>
 <br>
@@ -158,23 +158,24 @@ const maxPoint = long.reduce((max, d) =>
   d.value > max.value ? d : max
 );
 
-// Create threshold rows only for heavy_metals
-// const stations = Array.from(new Set(long.map(d => d.station_id)));
+// Get unique stations
+const stations1 = Array.from(new Set(long.map(d => d.station_id)));
 
-// const heavyMetalThresholdRows = [
-//   ...stations.map(station => ({
-//     station_id: station,
-//     type: "concern",
-//     threshold: threshold.heavy_metals.concern,
-//     label: "threshold concern"
-//   })),
-//   ...stations.map(station => ({
-//     station_id: station,
-//     type: "limit",
-//     threshold: threshold.heavy_metals.limit,
-//     label: "threshold limit"
-//   }))
-// ];
+// Create threshold lines for heavy metals only - they'll appear on all facets
+const heavyMetalThresholdRows = stations1.flatMap(station => [
+  {
+    station_id: station,
+    type: "concern",
+    threshold: threshold.heavy_metals.concern,
+    label: `Heavy Metal Concern Level: ${threshold.heavy_metals.concern} ppb`
+  },
+  {
+    station_id: station,
+    type: "limit",
+    threshold: threshold.heavy_metals.limit,
+    label: `Heavy Metal Threshold Limit: ${threshold.heavy_metals.limit} ppb`
+  }
+]);
 ```
 
 ```js
@@ -194,23 +195,6 @@ Plot.plot({
       stroke: "variable",    // color by variable
       tip: true
     }),
-    // Arrow - only render for the station with max point
-    // Plot.arrow(
-    //   long.filter(d => d.station_id === maxPoint.station_id && 
-    //                    d.date.getTime() === maxPoint.date.getTime() && 
-    //                    d.variable === maxPoint.variable),
-    //   {
-    //     x1: d => d.date,
-    //     y1: d => d.value + 5,
-    //     x2: d => d.date,
-    //     y2: d => d.value + 0.5,
-    //     fx: "station_id",
-    //     stroke: "red",
-    //     strokeWidth: 2,
-    //     headLength: 8
-    //   }
-    // ),
-    // Text annotation - only render for the station with max point
     Plot.text(
       long.filter(d => d.station_id === maxPoint.station_id && 
                        d.date.getTime() === maxPoint.date.getTime() && 
@@ -223,15 +207,54 @@ Plot.plot({
         fill: "red",
         fontWeight: "bold",
         textAnchor: "middle"
-      })
-    // Plot.ruleY(heavyMetalThresholdRows, {
-    //   y: "threshold",
-    //   stroke: d => d.type === "limit" ? "red" : "orange",
-    //   strokeDash: d => d.type === "limit" ? [6, 3] : [3, 3],
-    //   strokeWidth: 2,
-    //   filter: d => d.station_id === Plot.currentFacet, 
-    //   tip: d => `${d.label}: ${d.threshold}`
-    // })
+      }),
+    // Threshold lines - only show for heavy metals data
+    Plot.ruleY(
+      heavyMetalThresholdRows,
+      {
+        y: "threshold",
+        fx: "station_id",
+        stroke: d => d.type === "limit" ? "red" : "orange",
+        strokeDash: d => d.type === "limit" ? [6, 3] : [3, 3],
+        strokeWidth: 2,
+        tip: {
+          format: {
+            y: false,  // Don't show the default y value
+            fx: false  // Don't show station_id
+          }
+        },
+        title: d => d.label  // Use the label field for tooltip
+      }
+    ),
+    // Optional: Add text labels for thresholds
+    Plot.text(
+      heavyMetalThresholdRows.filter(d => d.type === "concern"),
+      {
+        x: long[0].date,
+        y: "threshold",
+        fx: "station_id",
+        text: "Threshold Concern Level",  // Static label
+        fill: "orange",
+        fontSize: 10,
+        dx: 5,
+        dy: -5,
+        textAnchor: "start"
+      }
+    ),
+    Plot.text(
+      heavyMetalThresholdRows.filter(d => d.type === "limit"),
+      {
+        x: long[0].date,
+        y: "threshold",
+        fx: "station_id",
+        text: "Threshold Limit",  // Static label
+        fill: "red",
+        fontSize: 10,
+        dx: 5,
+        dy: 5,
+        textAnchor: "start"
+      }
+    )
   ],
   x: { type: "utc", label: "Date" },
   // y: { label: "Value" },
@@ -240,11 +263,11 @@ Plot.plot({
 ```
 
 <p>
-Once again, the West station exhibits the most spikes in heavy metal contamination with scores ranging from 22.5 to a max of 48.8 ppb, way over the concern threshold of 20 ppb and regulatory limit of 30 ppb. Clearly the West station warrants a closer examination.
+Once again, the West station exhibits the most spikes in heavy metal contamination with scores ranging from 22.5 to a max of 48.8 ppb, way over the concern threshold of 20 ppb and regulatory limit of 30 ppb. Clearly the West station warrants a more focused examination.
 </p>
 
 <br>
-<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+<h2>
   <i> Which of the suspects operate closest to the West station?</i>
 </h2>
 <br>
@@ -269,6 +292,13 @@ const longDistances = stations.flatMap(d =>
 const minPointWest = longDistances
   .filter(d => d.station_id === "West" && d.variable !== "water_depth_m")
   .reduce((min, d) => d.value < min.value ? d : min);
+
+const labelMap = {
+  "distance_to_chemtech_m": "ChemTech",
+  "distance_to_farm_m": "Riverside Farm",
+  "distance_to_lodge_m": "Fishing Lodge",
+  "distance_to_resort_m": "Lakeside Resort"
+};
 ```
 
 ```js
@@ -305,7 +335,6 @@ Plot.plot({
         headLength: 12
       }
     ),
-    
     // Text annotation - filter data to match West
     Plot.text(
       longDistances.filter(d => 
@@ -324,7 +353,12 @@ Plot.plot({
       }
     )
   ],
-  x: { label: null, tickFormat: () => "" },
+  // x: { label: null, tickFormat: () => "" },
+  x: { 
+    label: "Suspects",  
+    tickFormat: d => labelMap[d] || d,  // Use custom labels or fallback to original
+    tickRotate: -45
+  },
   y: { label: "Distance / Depth (m)", grid: true },
   color: { legend: true }
 })
@@ -334,7 +368,7 @@ ChemTech Manufacturing is closest to the West station, operating at a distance o
 </p>
 
 <br>
-<h2 style="display: block; width: 100%; max-width: 100%; box-sizing: border-box; text-align: left;">
+<h2>
   <i> Are ChemTech’s activities related to the contamination and fish mortality spikes?</i>
 </h2>
 <br>
@@ -432,7 +466,7 @@ Plot.plot({
 
 <br>
 <p>
-Following almost every ChemTech maintenance shutdown coincides with a spike in the heavy metals contamination level and a drop in both the trout and bass count. The year-end maintenance shutdown in December 2023 exhibits the highest heavy metal level of 48.8 and a sharp drop in the fish population. The connection is clear as day. <br>
+Almost every ChemTech maintenance shutdown coincides with a spike in the heavy metals contamination level and a drop in both the trout and bass count. The year-end maintenance shutdown in December 2023 exhibits the highest heavy metal level of 48.8 and a sharp drop in the fish population. The connection is clear as day. <br>
 <b>The data categorically shows that ChemTech Manufacturing and their maintenance shutdowns are the primary culprits responsible for the Clearwater Crisis.</b>
 </p>
 
