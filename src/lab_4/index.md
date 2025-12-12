@@ -216,7 +216,7 @@ Plot.plot({
         fx: "station_id",
         stroke: d => d.type === "limit" ? "red" : "orange",
         strokeDash: d => d.type === "limit" ? [6, 3] : [3, 3],
-        strokeWidth: 2,
+        strokeWidth: 1,
         tip: {
           format: {
             y: false,  // Don't show the default y value
