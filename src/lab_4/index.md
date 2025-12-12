@@ -125,7 +125,7 @@ Plot.plot({
 <br>
 <!-- <p style="max-width: none; width: 100%; word-wrap: break-word; overflow-wrap: break-word;"> -->
 <p>
-The sharpest decline is seen in the trout population in the West station with a drop of 30 in the trout count over the two year period. Recent studies have shown that trout exhibit the highest sensitivity to heavy metal contamination. The Bass population has also declined significantly by 23. Both species are susceptible to heavy metal contamination and the next step would be to interrogate the water quality recorded at the the four monitoring stations.
+The sharpest decline is seen in the trout population in the West station with a drop of 30 in the trout count over the two year period. Recent studies have shown that trout exhibit the highest sensitivity to heavy metal contamination. The Bass population has also declined significantly by 23. Both species are susceptible to heavy metal contamination and the next step would be to interrogate the water quality recorded at the four monitoring stations.
 </p>
 <br>
 
@@ -263,7 +263,7 @@ Plot.plot({
 ```
 
 <p>
-Once again, the West station exhibits the most spikes in heavy metal contamination with scores ranging from 22.5 to a max of 48.8 ppb, way over the concern threshold of 20 ppb and regulatory limit of 30 ppb. Given the decline of trout and bass populations in the West station in addition to these high contamination levels, clearly the West station warrants a more focused examination. Next, let us check the suspects operating closest to the monitoring stations.
+Once again, the West station exhibits the most spikes in heavy metal contamination with scores ranging from 22.5 to a max of 48.8 ppb, way over the concern threshold of 20 ppb and regulatory limit of 30 ppb. Given the decline of trout and bass populations in the West station in addition to these high contamination levels, clearly the West station warrants a more focused examination. Next, let us check the suspects operating closest to the monitoring stations to find the possible source of the contamination.
 </p>
 
 <br>
