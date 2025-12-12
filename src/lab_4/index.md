@@ -467,7 +467,7 @@ Plot.plot({
 <br>
 <p>
 Almost every ChemTech maintenance shutdown coincides with a spike in the heavy metals contamination level and a drop in both the trout and bass count. The year-end maintenance shutdown in December 2023 exhibits the highest heavy metal level of 48.8 and a sharp drop in the fish population. The connection is clear as day. <br>
-<b>The data categorically shows that ChemTech Manufacturing and their maintenance shutdowns are the primary culprits responsible for the Clearwater Crisis.</b>
+<b>The data categorically shows that ChemTech Manufacturing and their quarterly maintenance shutdowns are the primary culprits responsible for the Clearwater Crisis.</b>
 </p>
 
 <!-- ```js
