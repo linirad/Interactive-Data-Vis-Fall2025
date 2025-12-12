@@ -36,7 +36,7 @@ const threshold = {
   Lab 4: Clearwater Crisis
 </h1> 
 
-Lake Clearwater was a thriving environment housing healthy fish populations. The ecological collapse over the past two years at the lake has witnessed a drastic fall in the fish populations and a disturbing rise in contamination levels. One of the establishments operating around the river i.e. Riverside Farm, Clearwater Fishing Lodge, Lakeside resort or ChemTech Manufacturing is likely responsible for the crisis. Let us evaluate the data to find the culprit. 
+Lake Clearwater was a thriving environment housing healthy fish populations. The ecological collapse over the past two years at the lake has witnessed a drastic fall in the fish populations and a disturbing rise in contamination levels. One of the establishments operating around the river i.e. either Riverside Farm, Clearwater Fishing Lodge, Lakeside resort or ChemTech Manufacturing is likely responsible for the crisis. Let us evaluate the data to find the culprit. 
 
 <br>
 
@@ -125,7 +125,7 @@ Plot.plot({
 <br>
 <!-- <p style="max-width: none; width: 100%; word-wrap: break-word; overflow-wrap: break-word;"> -->
 <p>
-The sharpest decline is seen in the trout population in the West station with a drop of 30 in the trout count over the two year period. As per recent studies, trout exhibit the highest sensitivity to heavy metal contamination. The Bass population has also declined significantly by 23.
+The sharpest decline is seen in the trout population in the West station with a drop of 30 in the trout count over the two year period. Recent studies have shown that trout exhibit the highest sensitivity to heavy metal contamination. The Bass population has also declined significantly by 23. Both species are susceptible to heavy metal contamination and the next step would be to interrogate the water quality recorded at the the four monitoring stations.
 </p>
 <br>
 
@@ -263,7 +263,7 @@ Plot.plot({
 ```
 
 <p>
-Once again, the West station exhibits the most spikes in heavy metal contamination with scores ranging from 22.5 to a max of 48.8 ppb, way over the concern threshold of 20 ppb and regulatory limit of 30 ppb. Clearly the West station warrants a more focused examination.
+Once again, the West station exhibits the most spikes in heavy metal contamination with scores ranging from 22.5 to a max of 48.8 ppb, way over the concern threshold of 20 ppb and regulatory limit of 30 ppb. Given the decline of trout and bass populations in the West station in addition to these high contamination levels, clearly the West station warrants a more focused examination. Next, let us check the suspects operating closest to the monitoring stations.
 </p>
 
 <br>
@@ -364,7 +364,7 @@ Plot.plot({
 })
 ```
 <p>
-ChemTech Manufacturing is closest to the West station, operating at a distance of 800m. Now that we have biological indicators connecting the high trout mortality in the West station to heavy metal contamination and spatial factors holding ChemTech responsible for the pollution spike owing to its close proximity to the West station, we can evaluate if the contamination spike and high mortality coincide with ChemTech’s activities.
+ChemTech Manufacturing is closest to the West station, operating at a distance of 800m. Now that we have biological indicators connecting the high trout and bass mortality to heavy metal contamination in the West station and spatial factors finding ChemTech in closest proximity to the West station, we should evaluate if the contamination spike and high mortality coincide with ChemTech’s activities.
 </p>
 
 <br>
