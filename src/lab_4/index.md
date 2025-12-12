@@ -36,7 +36,7 @@ const threshold = {
   Lab 4: Clearwater Crisis
 </h1> 
 
-The ecological collapse at Lake Clearwater has witnessed a drastic fall in the fish populations and a concerning rise in contamination levels. One of the establishments operating around the river i.e. Riverside Farm, Clearwater Fishing Lodge, Lakeside resort or ChemTech Manufacturing are likely responsible for the crisis. Let us look at the data to find the culprit. 
+Lake Clearwater was a thriving environment housing healthy fish populations. The ecological collapse over the past two years at the lake has witnessed a drastic fall in the fish populations and a disturbing rise in contamination levels. One of the establishments operating around the river i.e. Riverside Farm, Clearwater Fishing Lodge, Lakeside resort or ChemTech Manufacturing is likely responsible for the crisis. Let us evaluate the data to find the culprit. 
 
 <br>
 
