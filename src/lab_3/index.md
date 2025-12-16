@@ -40,6 +40,15 @@ const [minMargin, maxMarginRaw] = d3.extent(margins);
 
 // Symmetric max for diverging scale
 const maxMargin = Math.max(Math.abs(minMargin), Math.abs(maxMarginRaw));
+
+// Calculate overall totals across all rows
+const overallTotalVotes = results.reduce((sum, d) => sum + d.votes_candidate + d.votes_opponent, 0);
+const overallCandidateVotes = results.reduce((sum, d) => sum + d.votes_candidate, 0);
+const overallOpponentVotes = results.reduce((sum, d) => sum + d.votes_opponent, 0);
+
+// Calculate overall percentages
+const overallCandidateShare = parseFloat(((overallCandidateVotes / overallTotalVotes) * 100).toFixed(2));
+const overallOpponentShare = parseFloat(((overallOpponentVotes / overallTotalVotes) * 100).toFixed(2));
 ```
 
 
@@ -140,6 +149,8 @@ ${Plot.plot({
     <hr style="border: none; border-top: 1px solid #ccc; margin: 15px 0;"> 
     <h2><b>FINDINGS</b></h2>
     <p style="margin-bottom: 15px; width: 100%; max-width: 100%; box-sizing: border-box;">
+    The candidate got <b>${overallCandidateShare}%</b> of the vote (${overallCandidateVotes.toLocaleString()} votes), while the opponent received ${overallOpponentShare}% (${overallOpponentVotes.toLocaleString()} votes).
+    Total votes cast: ${overallTotalVotes.toLocaleString()}
     The candidate received majority votes from middle and low income neighborhoods, while the opponent received majority support from high income neighborhoods. The divide is glaringly apparent in the plot. The boros in red flagging majority votes for the opponent are consistently high income neighborhoods as shown by the labels. There appears to be major ideological differences between the candidate's governance approach and expectations of the affluent classes. The circle is used to indicate the number of doors knocked and the increasing radius shows that lower income neighborhoods saw more solicitation in this form.
   </p>
   </div>
