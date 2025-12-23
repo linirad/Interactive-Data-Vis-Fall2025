@@ -82,7 +82,9 @@ Plot.plot({
   grid: false,
   x: {nice: true, label: "Species count"},
   y: {inset: 5, label: "Species"},
-  fx: {label: "Pollution Sensitivity"},
+  fx: {label: "Pollution Sensitivity",
+       domain: ["High", "Medium", "Low"]
+  },
   fy: {label: "Station Id"},
   color: {
     scheme: "reds",
