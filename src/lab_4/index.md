@@ -115,7 +115,7 @@ Plot.plot({
       text: d => `⚠️ Largest decline ${d.species}: ${d.change}`,
       dy: -15,
       textAnchor: "start",
-      fill: "darkred",
+      fill: "white",
       fontSize: 9,
       fontWeight: "bold",
       lineWidth: 15
