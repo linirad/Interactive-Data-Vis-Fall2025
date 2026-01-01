@@ -95,7 +95,7 @@ Plot.plot({
   },
   facet: {marginRight: 90},
   marks: [
-    Plot.frame({fill: "#b3c7eeff"}),
+    Plot.frame({fill: "grey"}),
     Plot.arrow(processedData, {
       x1: "firstCount",
       x2: "lastCount",
@@ -115,7 +115,7 @@ Plot.plot({
       text: d => `⚠️ Largest decline ${d.species}: ${d.change}`,
       dy: -15,
       textAnchor: "start",
-      fill: "red",
+      fill: "darkred",
       fontSize: 9,
       fontWeight: "bold",
       lineWidth: 15
