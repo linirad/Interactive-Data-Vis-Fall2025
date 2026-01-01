@@ -436,14 +436,17 @@ ${Plot.plot({
   y: {tickFormat: "s", grid: true},
   color: {scheme: "spectral", legend: true},
   marks: [
-    Plot.barY(events, {
-      x: "event_type",
-      y: "estimated_attendance",
-      fill: "event_type",
-      tip: true,
-      fx: "income_category",
-      sort: {x: null, color: null, fx: {value: "-y", reduce: "sum"}}
-    }),
+    Plot.barY(events, Plot.groupX(
+      {y: "sum"},
+      {
+        x: "event_type",
+        y: "estimated_attendance",
+        fill: "event_type",
+        tip: true,
+        fx: "income_category",
+        sort: {x: null, color: null, fx: {value: "-y", reduce: "sum"}}
+      }
+    )),
     Plot.ruleY([0])
   ]
 })
